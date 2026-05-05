@@ -1,0 +1,44 @@
+// test-websocket.html
+<html>
+<body>
+    <button onclick="testWebSocket()">Test Connection</button>
+    <div id="status"></div>
+    <script>
+        async function testWebSocket() {
+            const ws = new WebSocket('ws://localhost:8000/ws/posture');
+            
+            ws.onopen = () => {
+                console.log('Connected');
+                document.getElementById('status').innerHTML = 'Connected ✅';
+                ws.send(JSON.stringify({exercise_type: 'study_default'}));
+            };
+            
+            ws.onmessage = (event) => {
+                console.log('Received:', event.data);
+                const data = JSON.parse(event.data);
+                document.getElementById('status').innerHTML = 
+                    `Status: ${data.status}<br>Message: ${data.message}`;
+                
+                if (data.status === 'ready') {
+                    // Send a test frame (simple black image)
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 640;
+                    canvas.height = 480;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(0, 0, 640, 480);
+                    
+                    const dataURL = canvas.toDataURL('image/jpeg');
+                    const base64Data = dataURL.split(',')[1];
+                    ws.send(base64Data);
+                }
+            };
+            
+            ws.onerror = (error) => {
+                console.error('Error:', error);
+                document.getElementById('status').innerHTML = 'Error ❌';
+            };
+        }
+    </script>
+</body>
+</html>

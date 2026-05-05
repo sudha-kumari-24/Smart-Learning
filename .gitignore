@@ -1,0 +1,286 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Backend - Node.js
+backend/node_modules/
+backend/package-lock.json
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
+
+# Backend - Python (AI Support)
+backend/AISupport_backend/ai_venv/
+backend/AISupport_backend/__pycache__/
+backend/AISupport_backend/temp_audio_ai/
+backend/AISupport_backend/*.pyc
+backend/AISupport_backend/.env
+backend/AISupport_backend/.env.local
+backend/AISupport_backend/ai_venv/
+backend/AISupport_backend/venv/
+
+# Backend - Python (root)
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/.env.local
+
+# Frontend
+frontend/node_modules/
+frontend/package-lock.json
+frontend/.env
+frontend/.env.local
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+dump/
+mongodb-data/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+server.log
+access.log
+error.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/settings.json
+.idea/workspace.xml
+.idea/tasks.xml
+*.iml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Build outputs
+dist/
+build/
+out/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Uploads and temporary files
+uploads/
+temp/
+tmp/
+temp_audio_ai/
+posture_logs/
+*.mp3
+*.wav
+*.webm
+*.mp4
+
+# Testing
+coverage/
+.nyc_output/
+*.test.js
+*.spec.js
+__tests__/
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.p8
+
+# AI Models (large files)
+*.h5
+*.pkl
+*.joblib
+*.onnx
+*.pb
+ai_models/*.h5
+ai_models/*.pkl
+ai_models/*.model
+
+# Video files (large)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+frontend/src/assets/videos/*.mp4
+frontend/src/assets/users_interview/*.webm
+frontend/src/assets/users_interview/*.mp4
+
+# Audio files
+*.mp3
+*.wav
+*.ogg
+*.flac
+
+# Project specific
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Docker
+.docker/
+docker-compose.override.yml
+*.dockerignore
+
+# Redis
+dump.rdb
+
+# Elasticsearch
+elasticsearch/
+
+# Session data
+.session
+.sessions
+
+# Database credentials
+*.sql
+dbconfig.js
+dbconfig.json
+database.json
+database.yml
+
+# Production build
+*.min.js
+*.min.css
+
+# Python specific
+Python/
+pip-log.txt
+pip-delete-this-directory.txt
+.python-version
+.coverage
+.tox/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# TypeScript
+*.tsbuildinfo
+
+# Next.js
+.next/
+out/
+.nuxt/
+
+# PHP
+*.php
+*.php~
+*.swo
+*.swn
+
+# Ruby
+*.gem
+*.rbc
+/.bundle
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+
+# C#
+*.exe
+*.dll
+bin/
+obj/
+
+# Go
+*.exe
+*.test
+*.out
+
+# Swift
+*.xcodeproj/
+*.xcworkspace/
+Pods/
+
+# Flutter
+.pub-cache/
+.pub/
+build/
+
+# React Native
+*.jks
+*.keystore
+*.p8
+*.mobileprovision
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.xz
+*.zst
+
+# But keep seed files
+!**/seed.js
+!**/seedCourses.js
+!**/seed-courses.js
+
+# But keep example env
+!.env.example
+!.env.sample
+
+# Keep READMEs
+!**/README.md
+!**/readme.md
+
+# Keep requirements files
+!requirements.txt
+!**/requirements.txt

@@ -1,0 +1,52 @@
+virtual environment is set in backend for python posture tracking 
+
+deactivate
+
+# Activate virtual environment (if using venv)
+cd backend
+venv\Scripts\activate
+
+# Install Python packages from requirements.txt
+pip install -r requirements.txt
+
+# python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+<!--  venv for whole is set seperately in python backend directory-->
+
+# venv\Scripts\activate        
+# python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+
+
+
+
+# Navigate to AI Support folder
+cd C:\Sudhadocuments\Sem7\project last sem\student_peers\backend\AISupport_backend
+
+cd backend/AISupport_backend
+
+# Activate it
+ai_venv\Scripts\activate
+
+# Now install from requirements.txt
+pip install -r requirements.txt
+
+# Run the server
+python ai_support_server.py
+
+python recommendation_server.py
+
+
+venv\Scripts\activate
+npm install
+
+
+cd backend
+node server.js  
+
+cd frontend
+npm run dev
+
+const GOOGLE_CLIENT_ID = '1061387661632-on954cpkr7b0611jg1kbkgmr5krg5kb7.apps.googleusercontent.com';
+
+

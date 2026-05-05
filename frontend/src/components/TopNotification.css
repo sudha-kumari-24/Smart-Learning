@@ -1,0 +1,30 @@
+.top-notification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  font-weight: 500;
+  z-index: 9999;
+  animation: slideDown 0.4s ease;
+}
+
+.top-notification.error {
+  background: #ff4d4f;
+  color: white;
+}
+
+.top-notification.success {
+  background: #52c41a;
+  color: white;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

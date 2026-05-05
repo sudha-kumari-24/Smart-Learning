@@ -1,0 +1,361 @@
+/* CourseDetail.css */
+
+.course-detail {
+  min-height: 100vh;
+  padding: 24px 32px;
+  background: var(--sl-bg);
+}
+
+/* Main Layout - YouTube Style */
+.course-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Video Primary Area */
+.video-primary {
+  width: 100%;
+}
+
+.video-player-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.video-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-info {
+  margin-top: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--sl-border-subtle);
+}
+
+.video-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--sl-text-strong);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.video-counter {
+  font-size: 14px;
+  color: var(--sl-text-muted);
+}
+
+.enroll-btn-small {
+  background: var(--sl-accent-main);
+  color: white;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.enroll-btn-small:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Course Description */
+.course-description {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--sl-surface-2);
+  border-radius: 12px;
+  border: 1px solid var(--sl-border-subtle);
+  cursor: pointer;
+}
+
+.course-description summary {
+  font-weight: 500;
+  color: var(--sl-text-strong);
+  cursor: pointer;
+  user-select: none;
+}
+
+.course-description p {
+  margin-top: 12px;
+  color: var(--sl-text-muted);
+  line-height: 1.6;
+}
+
+/* Playlist Sidebar */
+.playlist-sidebar {
+  background: var(--sl-surface-1);
+  border-radius: 12px;
+  border: 1px solid var(--sl-border-subtle);
+  overflow: hidden;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.playlist-header {
+  padding: 16px 20px;
+  background: var(--sl-surface-2);
+  border-bottom: 1px solid var(--sl-border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.playlist-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sl-text-strong);
+  margin: 0;
+}
+
+.playlist-count {
+  font-size: 13px;
+  color: var(--sl-text-muted);
+}
+
+.playlist-videos {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.playlist-videos::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playlist-videos::-webkit-scrollbar-track {
+  background: var(--sl-surface-3);
+}
+
+.playlist-videos::-webkit-scrollbar-thumb {
+  background: var(--sl-accent-soft);
+  border-radius: 3px;
+}
+
+/* Playlist Items */
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.playlist-item:hover {
+  background: var(--sl-chip-hover);
+}
+
+.playlist-item.active {
+  background: color-mix(in srgb, var(--sl-accent-main) 15%, transparent);
+  border-left-color: var(--sl-accent-main);
+}
+
+.playlist-thumbnail {
+  width: 40px;
+  height: 40px;
+  background: var(--sl-surface-3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.playing-indicator {
+  color: var(--sl-accent-main);
+  font-size: 18px;
+}
+
+.video-index {
+  color: var(--sl-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.playlist-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.playlist-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sl-text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.playlist-duration {
+  font-size: 12px;
+  color: var(--sl-text-muted);
+}
+
+.now-playing-badge {
+  font-size: 11px;
+  background: var(--sl-accent-alt);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* Mobile Navigation */
+.playlist-nav-mobile {
+  display: none;
+  padding: 16px;
+  gap: 12px;
+  border-top: 1px solid var(--sl-border-subtle);
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--sl-surface-2);
+  color: var(--sl-text-strong);
+  border: 1px solid var(--sl-border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--sl-accent-main);
+  color: white;
+  border-color: var(--sl-accent-main);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Certificate Section */
+.certificate-section {
+  max-width: 1600px;
+  margin: 32px auto 0;
+  text-align: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--sl-border-subtle);
+}
+
+.cert-btn {
+  background: var(--sl-accent-alt);
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cert-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--sl-bg);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--sl-border-subtle);
+  border-top-color: var(--sl-accent-main);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--sl-surface-1);
+  color: var(--sl-text-muted);
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .course-detail {
+    padding: 16px;
+  }
+
+  .course-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .playlist-sidebar {
+    position: static;
+    order: 2;
+  }
+
+  .playlist-nav-mobile {
+    display: flex;
+  }
+
+  .video-primary {
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-title {
+    font-size: 18px;
+  }
+
+  .playlist-item {
+    padding: 10px 12px;
+  }
+
+  .playlist-title {
+    font-size: 13px;
+  }
+}

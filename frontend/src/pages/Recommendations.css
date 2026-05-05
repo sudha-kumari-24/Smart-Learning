@@ -1,0 +1,478 @@
+/* Recommendations.css - with theme support */
+.recommendation-module {
+  all: initial;
+}
+
+.recommendation-module * {
+  box-sizing: border-box;
+}
+
+.recommendation-module .recommendations-container,
+.recommendation-module .recommendations-results {
+  min-height: 100vh;
+  background: var(--sl-bg);
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease;
+}
+
+.recommendation-module .recommendations-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.recommendation-module .recommendations-header h1 {
+  font-size: 2rem;
+  color: var(--sl-text-strong);
+  margin-bottom: 0.5rem;
+}
+
+.recommendation-module .recommendations-header p {
+  color: var(--sl-text-muted);
+  font-size: 1rem;
+}
+
+.recommendation-module .progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--sl-surface-2);
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.recommendation-module .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sl-accent-main), var(--sl-accent-alt));
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.recommendation-module .question-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--sl-surface-1);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .question-number {
+  font-size: 0.9rem;
+  color: var(--sl-accent-main);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.recommendation-module .question-text {
+  font-size: 1.5rem;
+  color: var(--sl-text-strong);
+  margin-bottom: 2rem;
+}
+
+.recommendation-module .options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.recommendation-module .option-btn {
+  padding: 1rem;
+  background: var(--sl-surface-2);
+  border: 2px solid var(--sl-border-subtle);
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--sl-text-strong);
+}
+
+.recommendation-module .option-btn:hover {
+  border-color: var(--sl-accent-main);
+  transform: translateY(-2px);
+}
+
+.recommendation-module .option-btn.selected {
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  border-color: transparent;
+}
+
+.recommendation-module .navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.recommendation-module .nav-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.recommendation-module .nav-btn.prev {
+  background: var(--sl-surface-2);
+  color: var(--sl-text-strong);
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .nav-btn.generate {
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  margin-left: auto;
+}
+
+.recommendation-module .nav-btn.generate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Results Page */
+.recommendation-module .results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.recommendation-module .results-header h1 {
+  font-size: 1.8rem;
+  color: var(--sl-text-strong);
+}
+
+.recommendation-module .restart-btn {
+  padding: 0.7rem 1.5rem;
+  background: var(--sl-surface-1);
+  border: 1px solid var(--sl-border-subtle);
+  border-radius: 10px;
+  color: var(--sl-text-strong);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.recommendation-module .restart-btn:hover {
+  background: var(--sl-surface-2);
+  transform: translateY(-2px);
+}
+
+.recommendation-module .ai-explanation {
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  color: white;
+}
+
+.recommendation-module .explanation-icon {
+  font-size: 2rem;
+}
+
+.recommendation-module .ai-explanation p {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.recommendation-module .rec-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.recommendation-module .rec-course-card {
+  background: var(--sl-surface-1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .rec-course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-color: var(--sl-accent-main);
+}
+
+.recommendation-module .course-rank {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.recommendation-module .rec-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.recommendation-module .rec-tag {
+  background: var(--sl-surface-2);
+  color: var(--sl-accent-main);
+  padding: 0.2rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .rec-course-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--sl-text-strong);
+}
+
+.recommendation-module .course-description {
+  color: var(--sl-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.recommendation-module .course-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: var(--sl-text-muted);
+}
+
+.recommendation-module .course-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #4ade80;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .rec-match-reasons {
+  background: var(--sl-surface-2);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .rec-match-reasons strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--sl-text-strong);
+}
+
+.recommendation-module .rec-match-reasons ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.recommendation-module .rec-match-reasons li {
+  font-size: 0.8rem;
+  color: #4ade80;
+  margin-bottom: 0.3rem;
+}
+
+.recommendation-module .rec-view-course-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.recommendation-module .rec-view-course-btn:hover {
+  transform: scale(1.02);
+}
+
+/* Chat Window */
+.recommendation-module .ai-chat-assistant {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.recommendation-module .chat-toggle-btn,
+.recommendation-module .floating-chat-btn {
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+}
+
+.recommendation-module .chat-toggle-btn:hover,
+.recommendation-module .floating-chat-btn:hover {
+  transform: scale(1.05);
+}
+
+.recommendation-module .floating-chat {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.recommendation-module .chat-window {
+  position: fixed;
+  bottom: 80px;
+  right: 2rem;
+  width: 350px;
+  background: var(--sl-surface-1);
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: rec-slideUp 0.3s ease;
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+}
+
+.recommendation-module .chat-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.recommendation-module .chat-messages {
+  min-height: 150px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.recommendation-module .chat-bubble.ai {
+  background: var(--sl-surface-2);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  color: var(--sl-text-strong);
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.recommendation-module .chat-input {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--sl-border-subtle);
+  gap: 0.5rem;
+}
+
+.recommendation-module .chat-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--sl-border-subtle);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--sl-surface-2);
+  color: var(--sl-text-strong);
+}
+
+.recommendation-module .chat-input input::placeholder {
+  color: var(--sl-text-muted);
+}
+
+.recommendation-module .chat-input button {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Loading */
+.recommendation-module .recommendations-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--sl-bg);
+}
+
+.recommendation-module .loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--sl-border-subtle);
+  border-top-color: var(--sl-accent-main);
+  border-radius: 50%;
+  animation: rec-spin 1s linear infinite;
+}
+
+@keyframes rec-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rec-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .recommendation-module .recommendations-container,
+  .recommendation-module .recommendations-results {
+    padding: 1rem;
+  }
+  
+  .recommendation-module .question-card {
+    padding: 1.5rem;
+  }
+  
+  .recommendation-module .options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recommendation-module .rec-courses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recommendation-module .chat-window {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+  }
+
+  
+}

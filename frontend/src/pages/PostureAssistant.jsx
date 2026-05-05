@@ -1,0 +1,676 @@
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useStudyTimer } from '../hooks/useStudyTimer';
+
+
+// import ReferenceVideoPoseDetection from './ReferenceVideoLandmarksDetector';
+
+import SimpleReferenceVideoDetector from './SimpleReferenceVideoDetector';
+
+import './PostureAssistant.css';
+
+const WS_URL = 'ws://localhost:8000/ws/posture';
+
+function PostureAssistant() {
+  const location = useLocation();
+  const exerciseType = location.state?.exerciseType || 'study_default';
+
+  // State declarations
+  const [detectionOn, setDetectionOn] = useState(false);
+  const [comment, setComment] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [connectionStatus, setConnectionStatus] = useState('disconnected');
+  const [landmarks, setLandmarks] = useState([]);
+  const [showLandmarks, setShowLandmarks] = useState(true);
+  const [lastSpokenTime, setLastSpokenTime] = useState(0);
+
+  // Refs
+  const videoRef = useRef(null);
+  const landmarksCanvasRef = useRef(null);
+  const wsRef = useRef(null);
+  const speechRef = useRef(null);
+  const lastDrawTimeRef = useRef(0);
+  const lastStatusRef = useRef('idle');
+
+  // Timer logic
+  const { seconds, isRunning, start, pause } = useStudyTimer();
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+
+  // for reference pose detection
+  const [showReferenceLandmarks, setShowReferenceLandmarks] = useState(true);
+
+  // Text-to-speech function
+  const speak = useCallback((text) => {
+    const now = Date.now();
+
+    // Don't speak if we just spoke recently (15 seconds cooldown)
+    if (now - lastSpokenTime < 15000) {
+      return;
+    }
+
+    if (!speechRef.current) {
+      speechRef.current = new SpeechSynthesisUtterance();
+      speechRef.current.rate = 1.0;
+      speechRef.current.pitch = 1.0;
+      speechRef.current.volume = 1.0;
+    }
+
+    window.speechSynthesis.cancel();
+    speechRef.current.text = text;
+    window.speechSynthesis.speak(speechRef.current);
+    setLastSpokenTime(now);
+  }, [lastSpokenTime]);
+
+  // Drawing function for landmarks
+  const drawLandmarksOnCanvas = useCallback((landmarksArray, currentStatus) => {
+    if (!landmarksCanvasRef.current || !landmarksArray || landmarksArray.length === 0) {
+      return;
+    }
+
+    const canvas = landmarksCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    // Sync canvas size with video
+    if (videoRef.current && videoRef.current.videoWidth > 0) {
+      const videoWidth = videoRef.current.videoWidth;
+      const videoHeight = videoRef.current.videoHeight;
+
+      if (canvas.width !== videoWidth || canvas.height !== videoHeight) {
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+      }
+    } else {
+      canvas.width = 640;
+      canvas.height = 480;
+    }
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Apply flip to match video
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.translate(-canvas.width, 0);
+
+    // Set colors based on status
+    const lineColor = currentStatus === 'correct' ? '#00FF00' : '#FF0000';
+    const pointColor = currentStatus === 'correct' ? '#00FF00' : '#FF0000';
+
+    // Make lines thicker for better visibility
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = lineColor;
+    ctx.fillStyle = pointColor;
+
+    // Define pose connections for 33 landmarks
+    const POSE_CONNECTIONS = [
+      // Face oval (simplified)
+      [0, 1], [1, 2], [2, 3], [3, 7],
+      [10, 9], [9, 8], [8, 4], [4, 5],
+      // Shoulders to hips
+      [11, 23], [12, 24],
+      // Shoulders to elbows
+      [11, 13], [12, 14],
+      // Elbows to wrists
+      [13, 15], [14, 16],
+      // Hips to knees
+      [23, 25], [24, 26],
+      // Knees to ankles
+      [25, 27], [26, 28],
+      // Shoulders connection
+      [11, 12],
+      // Hips connection
+      [23, 24]
+    ];
+
+    // Draw connections
+    POSE_CONNECTIONS.forEach(([startIdx, endIdx]) => {
+      if (landmarksArray[startIdx] && landmarksArray[endIdx] &&
+        landmarksArray[startIdx].x !== undefined &&
+        landmarksArray[endIdx].x !== undefined) {
+
+        ctx.beginPath();
+        ctx.moveTo(
+          landmarksArray[startIdx].x * canvas.width,
+          landmarksArray[startIdx].y * canvas.height
+        );
+        ctx.lineTo(
+          landmarksArray[endIdx].x * canvas.width,
+          landmarksArray[endIdx].y * canvas.height
+        );
+        ctx.stroke();
+      }
+    });
+
+    // Draw points
+    landmarksArray.forEach((landmark, index) => {
+      if (landmark && landmark.x !== undefined && landmark.y !== undefined) {
+        const radius = [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].includes(index) ? 5 : 3;
+
+        ctx.beginPath();
+        ctx.arc(
+          landmark.x * canvas.width,
+          landmark.y * canvas.height,
+          radius,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    });
+
+    ctx.restore();
+  }, []);
+
+  // Effect for handling landmarks visibility
+  useEffect(() => {
+    if (!landmarksCanvasRef.current) return;
+
+    const canvas = landmarksCanvasRef.current;
+
+    if (showLandmarks) {
+      canvas.style.opacity = '1';
+      canvas.style.visibility = 'visible';
+    } else {
+      canvas.style.opacity = '0';
+      setTimeout(() => {
+        if (!showLandmarks && canvas) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.style.visibility = 'hidden';
+        }
+      }, 150);
+    }
+  }, [showLandmarks]);
+
+  // Webcam setup effect
+  useEffect(() => {
+    if (!detectionOn) {
+      // Clear video source when detection is off
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        videoRef.current.srcObject = null;
+      }
+      return;
+    }
+
+    console.log("🎥 Setting up webcam...");
+
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        facingMode: 'user'
+      },
+      audio: false
+    }).then(stream => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(e => console.log("Video play error:", e));
+        console.log("✅ Webcam started");
+      }
+    }).catch(err => {
+      console.error('❌ Webcam error:', err);
+      setDetectionOn(false);
+      setStatus('idle');
+      setComment('Failed to access camera. Please check permissions.');
+    });
+
+    return () => {
+      if (videoRef.current?.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        videoRef.current.srcObject = null;
+      }
+    };
+  }, [detectionOn]);
+
+  // WebSocket connection effect
+  useEffect(() => {
+    if (!detectionOn) {
+      return;
+    }
+
+    console.log("🟡 Starting WebSocket connection...");
+    setConnectionStatus('connecting');
+
+    wsRef.current = new WebSocket(WS_URL);
+
+    wsRef.current.onopen = () => {
+      console.log('🟢 WebSocket CONNECTED');
+      setConnectionStatus('connected');
+
+      // Send initial configuration
+      wsRef.current.send(JSON.stringify({
+        exercise_type: exerciseType,
+        user_id: "demo_user"
+      }));
+    };
+
+    wsRef.current.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+
+        // Handle server ready message
+        if (data.status === 'ready') {
+          console.log("✅ Server ready for frames");
+          return;
+        }
+
+        // Update status and comment
+        if (data.status) {
+          setStatus(data.status);
+          lastStatusRef.current = data.status;
+        }
+
+        if (data.message || data.comment) {
+          const newComment = data.message || data.comment;
+          setComment(newComment);
+
+          // Speak feedback for incorrect posture
+          if (data.status === 'incorrect' && newComment) {
+            speak(newComment);
+          }
+          // Speak for correct posture (less frequently)
+          else if (data.status === 'correct' && Math.random() < 0.1) { // 10% chance
+            speak("Good posture");
+          }
+        }
+
+        // Handle landmarks
+        if (data.landmarks && Array.isArray(data.landmarks)) {
+          setLandmarks(data.landmarks);
+
+          // Draw landmarks immediately
+          if (showLandmarks) {
+            requestAnimationFrame(() => {
+              drawLandmarksOnCanvas(data.landmarks, data.status);
+            });
+          }
+        }
+
+        // Handle visualized frame if provided
+        if (data.visualized_frame && videoRef.current) {
+          const img = new Image();
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob(function (blob) {
+              if (blob) {
+                const url = URL.createObjectURL(blob);
+                videoRef.current.src = url;
+
+                if (videoRef.current._previousBlobUrl) {
+                  URL.revokeObjectURL(videoRef.current._previousBlobUrl);
+                }
+                videoRef.current._previousBlobUrl = url;
+              }
+            }, 'image/jpeg');
+          };
+
+          img.src = `data:image/jpeg;base64,${data.visualized_frame}`;
+        }
+
+      } catch (err) {
+        console.error("❌ JSON parse error:", err);
+      }
+    };
+
+    wsRef.current.onerror = (error) => {
+      console.error('❌ WebSocket error:', error);
+      setConnectionStatus('error');
+    };
+
+    wsRef.current.onclose = () => {
+      console.log('🔴 WebSocket CLOSED');
+      setConnectionStatus('disconnected');
+      if (detectionOn) {
+        setStatus('idle');
+        setComment('Connection lost');
+        setLandmarks([]);
+      }
+    };
+
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      if (videoRef.current && videoRef.current._previousBlobUrl) {
+        URL.revokeObjectURL(videoRef.current._previousBlobUrl);
+        videoRef.current._previousBlobUrl = null;
+      }
+    };
+  }, [detectionOn, exerciseType, showLandmarks, speak, drawLandmarksOnCanvas]);
+
+  // Frame capture and sending effect
+  useEffect(() => {
+    if (!detectionOn || !wsRef.current) {
+      return;
+    }
+
+    console.log("📡 Setting up frame capture...");
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    let frameCount = 0;
+    let isSending = false;
+    let sendInterval;
+
+    const checkVideoReady = () => {
+      const video = videoRef.current;
+      return video && video.readyState === 4 && video.videoWidth > 0;
+    };
+
+    const sendFrame = () => {
+      if (isSending || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      if (!checkVideoReady()) {
+        return;
+      }
+
+      isSending = true;
+
+      try {
+        const video = videoRef.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Draw mirrored video frame
+        ctx.save();
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        // Convert to base64
+        const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+        const base64Data = dataURL.split(',')[1];
+
+        frameCount++;
+        if (frameCount % 30 === 0) {
+          console.log(`📤 Sent ${frameCount} frames`);
+        }
+
+        // Send frame
+        wsRef.current.send(base64Data);
+      } catch (error) {
+        console.error("❌ Error capturing frame:", error);
+      } finally {
+        isSending = false;
+      }
+    };
+
+    // Start sending frames when video is ready
+    const readyCheck = setInterval(() => {
+      if (checkVideoReady()) {
+        console.log("✅ Video ready, starting frame capture");
+        clearInterval(readyCheck);
+        sendInterval = setInterval(sendFrame, 100); // 10fps
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(readyCheck);
+      if (sendInterval) {
+        clearInterval(sendInterval);
+      }
+      console.log("🛑 Frame capture stopped");
+    };
+  }, [detectionOn]);
+
+  // Exercise videos
+  const postureVideos = {
+    study_default: 'mDSNcLW06sI',
+    breathing: 'Vy7a0bOyIkA',
+    body_scan: 'n0sCHcQK4_0',
+    focus_reset: 'gaIWsrn8rws',
+    desk_stretch: 'EBxV9YDEtAk',
+    neck_shoulder: 'EBxV9YDEtAk',
+    eye_exercise: 'GYQvbvYAdoo',
+  };
+
+  const youtubeId = postureVideos[exerciseType];
+  const youtubeEmbed = youtubeId
+    ? `https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`
+    : null;
+
+  // Toggle detection handler
+  const toggleDetection = () => {
+    if (detectionOn) {
+      // Stop detection
+      setDetectionOn(false);
+      setStatus('idle');
+      setComment('');
+      setLandmarks([]);
+      setConnectionStatus('disconnected');
+
+      if (landmarksCanvasRef.current) {
+        const ctx = landmarksCanvasRef.current.getContext('2d');
+        ctx.clearRect(0, 0,
+          landmarksCanvasRef.current.width,
+          landmarksCanvasRef.current.height
+        );
+      }
+    } else {
+      // Start detection
+      setDetectionOn(true);
+      setStatus('connecting');
+      setComment('Starting camera and connection...');
+    }
+  };
+
+  return (
+    <section className="page posture-page">
+      <header className="page-header">
+        <span style={{ float: 'right', textAlign: 'center' }}>
+          <span style={{ fontSize: 28, fontFamily: 'monospace' }}>
+            {String(hours).padStart(2, '0')}:
+            {String(mins).padStart(2, '0')}:
+            {String(secs).padStart(2, '0')}
+          </span>
+          <br />
+          <span style={{ display: 'flex', justifyContent: 'center', gap: 15, marginTop: 10 }}>
+            <button className="timer-btn start" onClick={start} disabled={isRunning}>
+              ⏵ Start Timer
+            </button>
+            <button className="timer-btn pause" onClick={pause} disabled={!isRunning}>
+              ❚❚ Pause Timer
+            </button>
+          </span>
+        </span>
+
+        <h2>Posture & Exercise Assistant</h2>
+        <p>Reference video + real-time posture guidance</p>
+      </header>
+
+      <div className="posture-container">
+        {/* Reference Video */}
+        <div className="reference-video">
+          {/* <h3>Reference Video</h3> */}
+          {/* <div className="video-wrapper">
+            {youtubeEmbed ? (
+              <iframe
+                src={youtubeEmbed}
+                title="Posture Reference"
+                allowFullScreen
+                frameBorder="0"
+              />
+            ) : (
+              <div className="no-video">No reference video available</div>
+            )}
+          </div> */}
+
+          <SimpleReferenceVideoDetector
+            youtubeEmbed={youtubeEmbed}
+            showLandmarks={showReferenceLandmarks}
+            onToggleLandmarks={() => setShowReferenceLandmarks(!showReferenceLandmarks)}
+          />
+
+        </div>
+
+        {/* Live Detection */}
+        <div className="live-detection">
+          <h3>
+            Live Detection
+            <span style={{
+              marginLeft: '10px',
+              fontSize: '14px',
+              color: connectionStatus === 'connected' ? 'green' :
+                connectionStatus === 'connecting' ? 'orange' : 'red'
+            }}>
+              {connectionStatus === 'connected' ? '🟢 Connected' :
+                connectionStatus === 'connecting' ? '🟡 Connecting...' : '🔴 Disconnected'}
+            </span>
+          </h3>
+
+          <div className="live-canvas">
+            {!detectionOn ? (
+              <div className="idle-state">
+                <p>Click "Start Detection" to begin posture tracking</p>
+                <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>
+                  Status: {status.toUpperCase()}
+                </p>
+              </div>
+            ) : (
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '400px',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                backgroundColor: '#000'
+              }}>
+                {/* Video Feed */}
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  style={{
+                    transform: 'scaleX(-1)',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    backgroundColor: '#000'
+                  }}
+                />
+
+                {/* Landmarks Canvas */}
+                <canvas
+                  ref={landmarksCanvasRef}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    transform: 'scaleX(-1)',
+                    mixBlendMode: 'screen'
+                  }}
+                />
+
+                {/* Toggle Landmarks Button */}
+                <button
+                  onClick={() => setShowLandmarks(!showLandmarks)}
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '10px',
+                    padding: '8px 12px',
+                    backgroundColor: showLandmarks ? 'rgba(0, 100, 0, 0.8)' : 'rgba(100, 0, 0, 0.8)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    backdropFilter: 'blur(4px)',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {showLandmarks ? '👁‍🗨 Hide Landmarks' : '👁 Show Landmarks'}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Feedback Section */}
+          <div className="feedback">
+            <div style={{
+              padding: '15px',
+              backgroundColor: status === 'correct' ? '#d4edda' :
+                status === 'incorrect' ? '#f8d7da' : '#f0f0f0',
+              borderRadius: '8px',
+              border: `2px solid ${status === 'correct' ? '#28a745' :
+                status === 'incorrect' ? '#dc3545' : '#6c757d'
+                }`
+            }}>
+              <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                Status:
+                <span style={{
+                  color: status === 'correct' ? 'green' :
+                    status === 'incorrect' ? 'red' : '#555',
+                  marginLeft: '10px'
+                }}>
+                  {status.toUpperCase()}
+                </span>
+              </p>
+              <p className="comment-text">{comment || 'Waiting for detection...'}</p>
+
+              {status === 'incorrect' && (
+                <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#fff3cd', borderRadius: '5px' }}>
+                  <p style={{ fontWeight: 'bold', color: '#856404', marginBottom: '5px' }}>⚠️ Posture Issues:</p>
+                  <ul style={{ margin: 0, paddingLeft: '20px', color: 'black' }}>
+                    <li>Keep your spine straight</li>
+                    <li>Align shoulders with hips</li>
+                    <li>Keep head centered</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Control Button */}
+          <button
+            className="btn-primary"
+            onClick={toggleDetection}
+            style={{
+              marginTop: '20px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              backgroundColor: detectionOn ? '#dc3545' : '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+          >
+            {detectionOn ? (
+              <>
+                <span>⏹</span> Stop Posture Detection
+              </>
+            ) : (
+              <>
+                <span>▶</span> Start Posture Detection
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default PostureAssistant;

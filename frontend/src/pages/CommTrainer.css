@@ -1,0 +1,122 @@
+/* Communication Trainer Styles */
+.comm-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h2 {
+  font-size: 2.5rem;
+  color: var(--sl-text-strong);
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: var(--sl-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.comm-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.comm-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--sl-border-subtle);
+  background: var(--sl-surface-1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.comm-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.comm-card-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.comm-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.comm-card:hover .comm-img {
+  transform: scale(1.05);
+}
+
+.comm-card h3 {
+  font-size: 1.5rem;
+  color: var(--sl-text-strong);
+  margin: 1.5rem 1.5rem 0.5rem;
+}
+
+.comm-card p {
+  color: var(--sl-text-muted);
+  margin: 0 1.5rem 1.5rem;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.comm-card .btn-primary-sm {
+  margin: 0 1.5rem 1.5rem;
+  align-self: flex-start;
+  background-color: var(--sl-accent-main);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.comm-card .btn-primary-sm:hover {
+  background-color: var(--sl-accent-main);
+  opacity: 0.9;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .comm-card {
+  background: var(--sl-surface-1);
+  border-color: var(--sl-border-subtle);
+}
+
+[data-theme="light"] .comm-card {
+  background: var(--sl-surface-1);
+  border-color: var(--sl-border-subtle);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .comm-page {
+    padding: 1rem;
+  }
+  
+  .comm-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .page-header h2 {
+    font-size: 2rem;
+  }
+}

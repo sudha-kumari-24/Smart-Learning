@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartLearning Certificate</title>
+    <style>
+        @import url('https://googleapis.com');
+
+        :root {
+            --navy: #1a237e;
+            --lime: #9ccc65;
+            --white: #ffffff;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f2f5;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .certificate {
+            width: 800px;
+            height: 560px;
+            background: var(--white);
+            border: 15px solid #333;
+            position: relative;
+            padding: 40px;
+            box-sizing: border-box;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Geometric Background Elements */
+        .shape-top-left {
+            position: absolute;
+            top: -50px; left: -50px;
+            width: 200px; height: 200px;
+            background: var(--lime);
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        .shape-bottom-right {
+            position: absolute;
+            bottom: -80px; right: -80px;
+            width: 250px; height: 250px;
+            background: var(--navy);
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            border: 2px solid #eee;
+            height: 100%;
+            padding: 20px;
+        }
+
+        header h1 { color: var(--navy); font-size: 42px; margin: 0; letter-spacing: 5px; }
+        .sub-header { background: var(--lime); color: white; display: inline-block; padding: 5px 20px; font-weight: bold; margin-bottom: 20px; }
+        
+        .recipient-text { font-size: 16px; margin: 30px 0 10px; color: #555; }
+        .recipient-name { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--navy); margin: 0; border-bottom: 2px solid var(--navy); display: inline-block; padding: 0 40px; }
+        
+        .course-text { margin-top: 20px; font-size: 18px; color: #333; }
+        .course-name { font-weight: bold; color: var(--navy); font-size: 22px; }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 50px;
+            padding: 0 40px;
+        }
+
+        .sig-block { border-top: 1px solid #999; width: 200px; padding-top: 5px; font-size: 12px; }
+        
+        .badge {
+            position: absolute;
+            top: 20px; left: 40px;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="certificate">
+    <div class="shape-top-left"></div>
+    <div class="shape-bottom-right"></div>
+    
+    <div class="content">
+        <header>
+            <p style="margin:0; font-weight:bold; color:var(--navy)">SMARTLEARNING</p>
+            <p style="margin:0 0 20px; font-size:10px;">India's Trusted Learning Platform</p>
+            <h1>CERTIFICATE</h1>
+            <div class="sub-header">OF COMPLETION</div>
+        </header>
+
+        <p class="recipient-text">This certificate is proudly presented to</p>
+        <h2 class="recipient-name">Sudha Kumari</h2>
+        
+        <p class="course-text">for successfully completing the course</p>
+        <p class="course-name">Full Stack Web Development</p>
+
+        <div class="footer">
+            <div class="sig-block">
+                <strong>Sudha Kumari</strong><br>Founder & CEO
+            </div>
+            <div style="text-align: center; font-size: 10px;">
+                <p>Certificate No: SL-4812331</p>
+                <p>Issue Date: May 3, 2026</p>
+            </div>
+            <div class="sig-block">
+                <strong>QR Code</strong><br>Scan to Verify
+            </div>
+        </div>
+        
+        <p style="font-size: 10px; margin-top: 30px;">✨ SmartLearning — Empowering Education, Transforming Lives ✨</p>
+    </div>
+</div>
+
+</body>
+</html>

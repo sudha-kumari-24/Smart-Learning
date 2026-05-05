@@ -1,0 +1,310 @@
+.posture-page {
+  padding: 20px;
+}
+
+.posture-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  /* mobile layout will wrap */
+}
+
+.reference-video,
+.live-detection {
+  flex: 1 1 45%;
+  /* desktop width, shrinkable */
+  min-width: 300px;
+  /* ensures mobile scaling */
+  /* background: #fff; */
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: max-content;
+  position: relative;
+  width: 100%;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+ margin-top: 10px;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.live-detection canvas {
+  width: 100%;
+  /* max-height: 480px; */
+  border-radius: 8px;
+  background: #000;
+  /* shows the live video feed clearly */
+}
+
+.status-comment {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.comment-text {
+  margin-top: 5px;
+  font-style: italic;
+  color: #555;
+}
+
+/* Responsive: mobile view */
+@media (max-width: 768px) {
+  .posture-container {
+    flex-direction: column;
+  }
+
+  .reference-video,
+  .live-detection {
+    flex: 1 1 100%;
+  }
+}
+
+
+/* PostureAssistant.css - FIXED VERSION */
+
+/* Live Canvas Container */
+.live-canvas {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #000;
+  /* min-height: 480px; */
+  margin-bottom: 20px;
+}
+
+/* Idle State (when detection is off) */
+.live-canvas .idle-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* color: white; */
+  border-radius: 10px;
+  text-align: center;
+  padding: 40px;
+}
+
+.live-canvas .idle-state p {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+/* Video when detection is ON */
+.live-canvas video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  background-color: #000 !important;
+}
+
+/* Canvas overlay for landmarks */
+.live-canvas canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform: scaleX(-1);
+  mix-blend-mode: screen;
+  transition: opacity 0.15s ease;
+}
+
+/* Container for video and canvas */
+.live-canvas > div:not(.idle-state) {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* min-height: 480px; */
+}
+
+/* Pulse animation for connection indicator */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Button styles */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Connection status indicator */
+.connection-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.connection-indicator.connected {
+  background-color: #4CAF50;
+}
+
+.connection-indicator.connecting {
+  background-color: #FF9800;
+  animation: pulse 1.5s infinite;
+}
+
+.connection-indicator.disconnected {
+  background-color: #F44336;
+}
+
+/* Feedback section */
+.feedback {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.feedback-correct {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+}
+
+.feedback-incorrect {
+  background-color: #f8d7da;
+  border: 2px solid #dc3545;
+}
+
+.feedback-idle {
+  background-color: #f0f0f0;
+  border: 2px solid #6c757d;
+}
+
+.comment-text {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Control buttons */
+.btn-primary {
+  /* margin-top: 20px; */
+  padding: 12px 24px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.interview-card-content .btn-primary{
+  margin-top: 20px;
+}
+
+/* Timer buttons */
+.timer-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.timer-btn.start {
+  background-color: #28a745;
+  color: white;
+}
+
+.timer-btn.pause {
+  background-color: #dc3545;
+  color: white;
+}
+
+.timer-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
+/* Debug panel */
+.debug-panel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  /* background-color: rgba(0,0,0,0.7); */
+  /* color: white; */
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  font-family: monospace;
+}
+
+
+
+
+
+/* Reference Video Landmarks Styles */
+.reference-video-container {
+  width: 100%;
+}
+
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.video-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.landmarks-toggle-btn {
+  transition: all 0.2s ease;
+}
+
+.landmarks-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+.landmarks-legend {
+  transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .video-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .video-header h3 {
+    font-size: 16px;
+  }
+  
+  .landmarks-toggle-btn {
+    align-self: flex-start;
+  }
+}
+
+

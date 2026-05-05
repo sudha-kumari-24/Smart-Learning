@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-dotenv
+opencv-python
+mediapipe
+numpy
+python-jose
+passlib[bcrypt]
+sqlalchemy
+
+
+
+
+
+# 

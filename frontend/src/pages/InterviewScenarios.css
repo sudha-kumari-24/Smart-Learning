@@ -1,0 +1,129 @@
+/* Interview Scenarios Styles */
+.interview-scenarios-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 2rem 0 3rem;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--sl-border-subtle);
+  background: var(--sl-surface-2);
+  color: var(--sl-text-muted);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--sl-accent-main);
+  color: var(--sl-accent-main);
+}
+
+.filter-btn.active {
+  background: var(--sl-accent-main);
+  color: white;
+  border-color: var(--sl-accent-main);
+}
+
+.interview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.interview-card {
+  background: var(--sl-surface-1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sl-border-subtle);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.interview-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.interview-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.interview-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.interview-count {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--sl-accent-main);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.interview-card-content {
+  padding: 1.5rem;
+}
+
+.interview-card-content h3 {
+  font-size: 1.25rem;
+  color: var(--sl-text-strong);
+  margin-bottom: 0.5rem;
+}
+
+.interview-card-content p {
+  color: var(--sl-text-muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.interview-card-content .btn-primary {
+  width: 100%;
+  background: var(--sl-accent-main);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.interview-card-content .btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .interview-scenarios-page {
+    padding: 1rem;
+  }
+  
+  .interview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-filter {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+}
