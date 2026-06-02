@@ -2,12 +2,10 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const Course = require('./models/Course');
 const User = require('./models/User');
-const Progress = require('./models/Progress');
+const CourseProgress = require('./models/CourseProgress');
 const CallRequest = require('./models/CallRequest');
-const DailyProgress = require('./models/DailyProgress');
-
+const StudySession = require('./models/StudySession');
 const InterviewSession = require('./models/InterviewSession');
-
 
 dotenv.config();
 
@@ -19,16 +17,17 @@ async function seed() {
     await Promise.all([
       Course.deleteMany({}),
       User.deleteMany({}),
-      Progress.deleteMany({}),
+      CourseProgress.deleteMany({}),
       CallRequest.deleteMany({}),
-      DailyProgress.deleteMany({}),
+      StudySession.deleteMany({}),
       InterviewSession.deleteMany({}),
-
     ]);
+
 
     console.log('Cleared existing collections');
 
 
+    // Drop index if exists
     try {
       await Course.collection.dropIndex('level_1');
       console.log('✅ Dropped unique index on level field');
@@ -36,7 +35,8 @@ async function seed() {
       console.log('⚠️ Index level_1 may not exist:', err.message);
     }
 
-    // 2) Insert raw users
+
+    // 2) Insert users
     const users = await User.insertMany([
       {
         fullName: 'Sudha Kumari',
@@ -56,7 +56,7 @@ async function seed() {
 
     console.log(`Inserted ${users.length} users`);
 
-
+    // 3) Insert courses
     const coursesData = [
       {
         title: 'Data Structures Essentials',
@@ -73,14 +73,8 @@ async function seed() {
         isActive: true,
         price: 0,
         videos: [
-          {
-            title: "Arrays",
-            embedUrl: "https://www.youtube.com/embed/AT14lCXuMKI"
-          },
-          {
-            title: "Linked List",
-            embedUrl: "https://www.youtube.com/embed/njTh_OwMljA"
-          }
+          { title: "Arrays", embedUrl: "https://www.youtube.com/embed/AT14lCXuMKI" },
+          { title: "Linked List", embedUrl: "https://www.youtube.com/embed/njTh_OwMljA" }
         ]
       },
       {
@@ -88,7 +82,7 @@ async function seed() {
         level: 'Intermediate',
         durationHours: 10,
         tags: ['ML', 'AI', 'Python'],
-        description: 'Learn ML concepts with practical projects and real-world applications',
+        description: 'Learn ML concepts with practical projects',
         category: 'Data Science',
         enrolled: 8900,
         completionRate: '88%',
@@ -98,14 +92,8 @@ async function seed() {
         isActive: true,
         price: 0,
         videos: [
-          {
-            title: "ML Basics",
-            embedUrl: "https://www.youtube.com/embed/i_LwzRVP7bg"
-          },
-          {
-            title: "ML Advance",
-            embedUrl: "https://www.youtube.com/embed/hR-tMLTMw0s"
-          }
+          { title: "ML Basics", embedUrl: "https://www.youtube.com/embed/i_LwzRVP7bg" },
+          { title: "ML Advance", embedUrl: "https://www.youtube.com/embed/hR-tMLTMw0s" }
         ]
       },
       {
@@ -113,7 +101,7 @@ async function seed() {
         level: 'All',
         durationHours: 4,
         tags: ['Soft Skills', 'Communication', 'Interview'],
-        description: 'Improve your communication for interviews and workplace success',
+        description: 'Improve your communication for interviews',
         category: 'Soft Skills',
         enrolled: 5400,
         completionRate: '95%',
@@ -123,14 +111,8 @@ async function seed() {
         isActive: true,
         price: 0,
         videos: [
-          {
-            title: "Personality Development",
-            embedUrl: "https://www.youtube.com/embed/nwlPIoFhNc0"
-          },
-          {
-            title: "Spoken English",
-            embedUrl: "https://www.youtube.com/embed/AmHS2GrmWXI"
-          }
+          { title: "Personality Development", embedUrl: "https://www.youtube.com/embed/nwlPIoFhNc0" },
+          { title: "Spoken English", embedUrl: "https://www.youtube.com/embed/AmHS2GrmWXI" }
         ]
       },
       {
@@ -138,7 +120,7 @@ async function seed() {
         level: 'Intermediate',
         durationHours: 12,
         tags: ['Web', 'React', 'Node.js', 'MongoDB'],
-        description: 'Build modern web applications from frontend to backend',
+        description: 'Build modern web applications',
         category: 'Development',
         enrolled: 15000,
         completionRate: '85%',
@@ -148,7 +130,7 @@ async function seed() {
         isActive: true,
         price: 0,
         videos: [
-          { title: "Become a Fullstack Developer from Scratch", embedUrl: "https://www.youtube.com/embed/LzMnsfqjzkA" },
+          { title: "Become a Fullstack Developer", embedUrl: "https://www.youtube.com/embed/LzMnsfqjzkA" },
           { title: "React Fundamentals", embedUrl: "https://www.youtube.com/embed/SqcY0GlETPk" },
           { title: "Node.js & Express API", embedUrl: "https://www.youtube.com/embed/0IciwnJ6PJI" },
           { title: "Connecting Frontend to Backend", embedUrl: "https://www.youtube.com/embed/WY0TFUPu40s" }
@@ -157,78 +139,49 @@ async function seed() {
     ];
 
     const courses = [];
-
     for (const c of coursesData) {
       const course = await Course.findOneAndUpdate(
-        { title: c.title },   // 🔑 unique
+        { title: c.title },
         { $set: c },
         { new: true, upsert: true }
       );
       courses.push(course);
     }
-
-
     console.log(`Inserted ${courses.length} courses`);
 
-    // 4) Insert some progress for demo user[0]
+    // 4) Insert some course progress for demo user
     const demoUser = users[0];
+    await CourseProgress.updateOne(
+      { user: demoUser._id, course: courses[0]._id },
+      { 
+        $set: { 
+          progressPercent: 40, 
+          completed: false,
+          watchedVideos: [0, 1, 2, 3],
+          lastVideoIndex: 3
+        } 
+      },
+      { upsert: true }
+    );
+    console.log('Inserted course progress records');
 
-    for (const p of [
-      {
-        user: users[0]._id,
-        course: courses[0]._id,
-        completedLessons: 4,
-        totalLessons: 10,
-        completionPercentage: 40,
-        status: 'in_progress'
-      }
-    ]) {
-      await Progress.updateOne(
-        { user: p.user, course: p.course }, // 🔑 unique combo
-        { $set: p },
-        { upsert: true }
-      );
-    }
+    // 5) Insert study sessions (timer data)
+    await StudySession.insertMany([
+      { user: demoUser._id, date: '2025-01-01', minutesStudied: 30, sessionType: 'timer' },
+      { user: demoUser._id, date: '2025-01-02', minutesStudied: 45, sessionType: 'timer' },
+      { user: demoUser._id, date: '2025-01-03', minutesStudied: 20, sessionType: 'posture' },
+    ]);
+    console.log('Inserted study sessions');
 
-    console.log('Inserted progress records');
-
-    // 5) Insert demo call request
+    // 6) Insert demo call request
     await CallRequest.create({
       user: demoUser._id,
       topic: 'stress',
       note: 'Need help balancing study and project work.',
     });
-
     console.log('Inserted sample call request');
 
-    // 6) Insert daily progress
-    await DailyProgress.insertMany([
-      {
-        user: demoUser._id,
-        course: courses[0]._id,
-        date: new Date('2025-01-01'),
-        minutesStudied: 30,
-      },
-      {
-        user: demoUser._id,
-        course: courses[0]._id,
-        date: new Date('2025-01-02'),
-        minutesStudied: 45,
-      },
-      {
-        user: demoUser._id,
-        course: courses[1]._id,
-        date: new Date('2025-01-02'),
-        minutesStudied: 20,
-      },
-    ]);
-
-    console.log('Inserted daily progress records');
-
-
-
-
-
+    // 7) Insert interview sessions
     await InterviewSession.insertMany([
       {
         userId: demoUser._id,
@@ -250,15 +203,7 @@ async function seed() {
         createdAt: new Date('2025-01-09')
       }
     ]);
-
     console.log('Inserted sample interview sessions');
-
-
-
-
-
-
-
 
     console.log('Seeding completed ✅');
     process.exit(0);

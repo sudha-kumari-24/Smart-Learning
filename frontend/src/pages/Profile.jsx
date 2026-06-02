@@ -11,6 +11,7 @@ function Profile() {
   const [todayMinutes, setTodayMinutes] = useState(0);
   const [recentActivity, setRecentActivity] = useState([]);
   const [studyStreak, setStudyStreak] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
 
   if (!user) {
     return (
@@ -21,24 +22,17 @@ function Profile() {
     );
   }
 
-  // Fetch today's progress
+  // Fetch today's progress from new dashboard endpoint
   useEffect(() => {
-    fetch(`http://localhost:5000/api/analytics/today?userId=${user.id}`)
+    fetch(`http://localhost:5000/api/analytics/dashboard?userId=${user.id}`)
       .then(res => res.json())
       .then(data => {
-        setTodayMinutes(data.minutesStudied || 0);
+        if (data.success) {
+          setTodayMinutes(data.todayMinutes || 0);
+          setStudyStreak(data.streak || 0);
+        }
       })
       .catch(err => console.error('Error fetching progress:', err));
-  }, [user]);
-
-  // Fetch study streak
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/analytics/streak?userId=${user.id}`)
-      .then(res => res.json())
-      .then(data => {
-        setStudyStreak(data.streak || 0);
-      })
-      .catch(err => console.error('Error fetching streak:', err));
   }, [user]);
 
   function handlePause(seconds) {
@@ -47,7 +41,8 @@ function Profile() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         userId: user.id,
-        seconds
+        seconds,
+        sessionType: 'timer'
       })
     })
       .then(res => res.json())
@@ -105,6 +100,7 @@ function Profile() {
             <div className="progress-bar" style={{ width: `${Math.min((todayMinutes / 120) * 100, 100)}%` }}></div>
           </div>
         </div>
+
         <div className="stat-card">
           <div className="stat-icon">🔥</div>
           <div className="stat-info">
@@ -112,6 +108,7 @@ function Profile() {
             <span className="stat-label">Day Streak</span>
           </div>
         </div>
+        
         <div className="stat-card">
           <div className="stat-icon">⭐</div>
           <div className="stat-info">
@@ -119,8 +116,8 @@ function Profile() {
             <span className="stat-label">Total Study Time</span>
           </div>
         </div>
+
         <div className="stat-card">
-          {/* <div className="stat-icon">{studyStatus.icon}</div> */}
           <div className="stat-info">
             <span className="stat-value" style={{ color: studyStatus.color }}>{studyStatus.level}</span>
             <span className="stat-label">Study Status</span>
@@ -135,7 +132,22 @@ function Profile() {
           <p>Start your study timer and track your progress</p>
         </div>
         <div className="timer-wrapper">
-          <StudyTimer onPause={handlePause} />
+          <StudyTimer onPause={handlePause} isMuted={isMuted} />
+        </div>
+        <div className="mute-control" style={{ textAlign: 'center', marginTop: '10px' }}>
+          <button 
+            onClick={() => setIsMuted(!isMuted)}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '24px',
+              cursor: 'pointer',
+              padding: '5px 10px'
+            }}
+            title={isMuted ? 'Unmute clock sound' : 'Mute clock sound'}
+          >
+            {isMuted ? '🔇' : '🔊'}
+          </button>
         </div>
       </div>
 
@@ -195,7 +207,6 @@ function Profile() {
             <span className="card-icon">🧘</span>
             <h3>Wellness & Breaks</h3>
           </div>
-
           <div className="info-list">
             <div className="info-row">
               <span className="info-label">Preferred Breaks</span>

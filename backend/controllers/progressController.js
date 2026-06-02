@@ -1,4 +1,4 @@
-const DailyProgress = require('../models/DailyProgress');
+const StudySession = require('../models/StudySession');
 
 // ---------- SEED DUMMY DATA ----------
 exports.seedDummyData = async (req, res) => {
@@ -9,13 +9,13 @@ exports.seedDummyData = async (req, res) => {
   }
 
   const dummyData = [
-    { date: '2025-12-18', minutesStudied: 30 },
-    { date: '2025-12-19', minutesStudied: 45 },
-    { date: '2025-12-20', minutesStudied: 60 },
-    { date: '2025-12-21', minutesStudied: 90 },
-    { date: '2025-12-22', minutesStudied: 80 },
-    { date: '2025-12-23', minutesStudied: 120 },
-    { date: '2025-12-24', minutesStudied: 100 }
+    { date: '2025-12-18', minutesStudied: 30, sessionType: 'timer' },
+    { date: '2025-12-19', minutesStudied: 45, sessionType: 'timer' },
+    { date: '2025-12-20', minutesStudied: 60, sessionType: 'timer' },
+    { date: '2025-12-21', minutesStudied: 90, sessionType: 'timer' },
+    { date: '2025-12-22', minutesStudied: 80, sessionType: 'timer' },
+    { date: '2025-12-23', minutesStudied: 120, sessionType: 'timer' },
+    { date: '2025-12-24', minutesStudied: 100, sessionType: 'timer' }
   ];
 
   try {
@@ -23,15 +23,15 @@ exports.seedDummyData = async (req, res) => {
       updateOne: {
         filter: {
           user: userId,
-          date: new Date(item.date),
-          course: null
+          date: item.date,
+          sessionType: item.sessionType
         },
         update: { $set: { minutesStudied: item.minutesStudied } },
         upsert: true
       }
     }));
 
-    await DailyProgress.bulkWrite(ops);
+    await StudySession.bulkWrite(ops);
     res.json({ message: 'Dummy data seeded' });
   } catch (err) {
     console.error(err);
@@ -39,7 +39,7 @@ exports.seedDummyData = async (req, res) => {
   }
 };
 
-// ---------- GET DAILY PROGRESS ----------
+// ---------- GET DAILY PROGRESS (for backward compatibility) ----------
 exports.getDailyProgress = async (req, res) => {
   const { userId, days = 7 } = req.query;
 
@@ -47,52 +47,79 @@ exports.getDailyProgress = async (req, res) => {
     return res.status(400).json({ message: 'User ID required' });
   }
 
-  const start = new Date();
-  start.setDate(start.getDate() - days + 1);
-  start.setHours(0, 0, 0, 0);
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days + 1);
+  const startDateStr = startDate.toISOString().split('T')[0];
 
   try {
-    const data = await DailyProgress.find({
-      user: userId,
-      date: { $gte: start }
-    }).sort('date');
+    const result = await StudySession.aggregate([
+      { $match: { user: userId, date: { $gte: startDateStr } } },
+      { $group: { _id: '$date', minutesStudied: { $sum: '$minutesStudied' } } },
+      { $sort: { _id: 1 } }
+    ]);
 
-    res.json(data);
+    const dailyData = [];
+    for (let i = 0; i < days; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - (days - 1 - i));
+      const dateStr = date.toISOString().split('T')[0];
+      const found = result.find(r => r._id === dateStr);
+      dailyData.push({
+        date: dateStr,
+        minutesStudied: found?.minutesStudied || 0
+      });
+    }
+
+    res.json(dailyData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Fetch failed' });
   }
 };
 
-// ---------- UPDATE PROGRESS ----------
+// ---------- UPDATE PROGRESS (TIMER) ----------
 exports.updateProgress = async (req, res) => {
-  const { userId, seconds, courseId = null } = req.body;
+  const { userId, seconds, sessionType = 'timer' } = req.body;
 
   if (!userId || !seconds || seconds <= 0) {
     return res.status(400).json({ message: 'Invalid payload' });
   }
 
   const minutes = Math.floor(seconds / 60);
+  const today = new Date().toISOString().split('T')[0];
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  console.log(
-    `[PROGRESS] user=${userId} minutes=${minutes} date=${today.toDateString()}`
-  );
+  console.log(`[PROGRESS] user=${userId} minutes=${minutes} date=${today} type=${sessionType}`);
 
   try {
-    const progress = await DailyProgress.findOneAndUpdate(
-      { user: userId, date: today, course: courseId },
-      { $inc: { minutesStudied: minutes } },
-      { upsert: true, new: true }
-    );
+    // Find or create study session for today
+    let session = await StudySession.findOne({
+      user: userId,
+      date: today,
+      sessionType: sessionType
+    });
 
-    console.log('[DB UPDATED FOR USER]', userId);
+    if (session) {
+      session.minutesStudied += minutes;
+      await session.save();
+    } else {
+      session = await StudySession.create({
+        user: userId,
+        date: today,
+        sessionType: sessionType,
+        minutesStudied: minutes
+      });
+    }
 
+    // Also update total minutes for the day (regardless of type) for quick response
+    const totalToday = await StudySession.aggregate([
+      { $match: { user: userId, date: today } },
+      { $group: { _id: null, total: { $sum: '$minutesStudied' } } }
+    ]);
 
-    console.log('[DB UPDATED]', progress);
-    res.json(progress);
+    res.json({ 
+      minutesStudied: totalToday[0]?.total || minutes,
+      sessionType 
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Update failed' });

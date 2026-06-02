@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const progressSchema = new mongoose.Schema({
+const courseProgressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -13,7 +13,9 @@ const progressSchema = new mongoose.Schema({
   },
   progressPercent: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0,
+    max: 100
   },
   completed: {
     type: Boolean,
@@ -23,17 +25,17 @@ const progressSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  },
   watchedVideos: {
     type: [Number],
     default: []
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
-});
+}, { timestamps: true });
 
-// ❗ IMPORTANT: Prevent duplicate enrollments
-progressSchema.index({ user: 1, course: 1 }, { unique: true });
+// Prevent duplicate enrollments
+courseProgressSchema.index({ user: 1, course: 1 }, { unique: true });
 
-module.exports = mongoose.model('Progress', progressSchema);
+module.exports = mongoose.model('CourseProgress', courseProgressSchema);

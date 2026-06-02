@@ -1,322 +1,237 @@
-// SimpleReferenceVideoDetector.jsx
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+// Import all exercise videos
+import breathingVideo from '../assets/exercise_videos/breathing.mp4';
+import bodyScanVideo from '../assets/exercise_videos/body_scan.mp4';
+import focusResetVideo from '../assets/exercise_videos/focus_reset.mp4';
+import deskStretchVideo from '../assets/exercise_videos/desk_stretch.mp4';
+import neckShoulderVideo from '../assets/exercise_videos/neck_shoulder.mp4';
+import eyeExerciseVideo from '../assets/exercise_videos/eye_exercise.mp4';
+import studyDefaultVideo from '../assets/exercise_videos/study_default.mp4';
+
+const videoMap = {
+  breathing: breathingVideo,
+  body_scan: bodyScanVideo,
+  focus_reset: focusResetVideo,
+  desk_stretch: deskStretchVideo,
+  neck_shoulder: neckShoulderVideo,
+  eye_exercise: eyeExerciseVideo,
+  study_default: studyDefaultVideo
+};
 
 const SimpleReferenceVideoDetector = ({ 
-  youtubeEmbed,
-  showLandmarks = true,
-  onToggleLandmarks 
+  exerciseType = 'study_default',
+  showLandmarks = false,
+  onToggleLandmarks,
+  onLandmarksDetected 
 }) => {
-  const containerRef = useRef(null);
+  const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const poseRef = useRef(null);
   const animationFrameRef = useRef(null);
   
   const [isPlaying, setIsPlaying] = useState(false);
-  const [fps, setFps] = useState(0);
-  const [landmarks, setLandmarks] = useState([]);
-  const [simulatedTime, setSimulatedTime] = useState(0);
+  const [isPoseReady, setIsPoseReady] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // Simulate landmark movement (for demo purposes)
-  const simulateLandmarks = useCallback((time) => {
-    const baseLandmarks = [];
-    
-    // Create base perfect posture landmarks
-    for (let i = 0; i < 33; i++) {
-      let x, y;
-      
-      if (i === 0) { // Nose
-        x = 0.5 + Math.sin(time * 0.001) * 0.02;
-        y = 0.2 + Math.cos(time * 0.0005) * 0.01;
-      } else if (i === 11) { // Left shoulder
-        x = 0.4 + Math.sin(time * 0.002) * 0.01;
-        y = 0.35;
-      } else if (i === 12) { // Right shoulder
-        x = 0.6 + Math.sin(time * 0.002) * 0.01;
-        y = 0.35;
-      } else if (i === 13) { // Left elbow
-        x = 0.35 + Math.sin(time * 0.003) * 0.02;
-        y = 0.45;
-      } else if (i === 14) { // Right elbow
-        x = 0.65 + Math.sin(time * 0.003) * 0.02;
-        y = 0.45;
-      } else if (i === 15) { // Left wrist
-        x = 0.3 + Math.sin(time * 0.004) * 0.03;
-        y = 0.55;
-      } else if (i === 16) { // Right wrist
-        x = 0.7 + Math.sin(time * 0.004) * 0.03;
-        y = 0.55;
-      } else if (i === 23) { // Left hip
-        x = 0.45;
-        y = 0.55 + Math.sin(time * 0.001) * 0.005;
-      } else if (i === 24) { // Right hip
-        x = 0.55;
-        y = 0.55 + Math.sin(time * 0.001) * 0.005;
-      } else {
-        x = 0.5 + (Math.random() * 0.1 - 0.05);
-        y = 0.2 + (i / 33 * 0.7);
+  // Initialize MediaPipe Pose (only if showLandmarks is true)
+  useEffect(() => {
+    if (!showLandmarks) return;
+
+    const initMediaPipe = () => {
+      if (window.Pose) {
+        setupPoseDetector();
+        return;
       }
-      
-      // Add subtle movement
-      x += Math.sin(time * 0.001 + i) * 0.01;
-      y += Math.cos(time * 0.001 + i) * 0.01;
-      
-      baseLandmarks.push({ 
-        x: Math.max(0.1, Math.min(0.9, x)), 
-        y: Math.max(0.1, Math.min(0.9, y)),
-        visibility: 1 
-      });
-    }
-    
-    return baseLandmarks;
-  }, []);
 
-  // Draw landmarks on canvas
-  const drawLandmarks = useCallback(() => {
-    if (!canvasRef.current || !showLandmarks) return;
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js';
+      script.onload = setupPoseDetector;
+      script.onerror = () => console.error('Failed to load MediaPipe');
+      document.head.appendChild(script);
+    };
+
+    const setupPoseDetector = () => {
+      try {
+        poseRef.current = new window.Pose({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        
+        poseRef.current.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5,
+          selfieMode: false
+        });
+        
+        poseRef.current.onResults(onPoseResults);
+        setIsPoseReady(true);
+        console.log('MediaPipe Pose ready for reference video');
+      } catch (err) {
+        console.error('Pose detector error:', err);
+      }
+    };
+
+    initMediaPipe();
+
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (poseRef.current) poseRef.current.close();
+    };
+  }, [showLandmarks]);
+
+  // Handle pose results
+  const onPoseResults = (results) => {
+    if (!canvasRef.current || !videoRef.current) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
     
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-    
-    if (landmarks.length === 0) return;
-    
-    // Set drawing style - ALWAYS GREEN for reference
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#00FF00';
-    ctx.fillStyle = '#00FF00';
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    
-    // Define connections
-    const POSE_CONNECTIONS = [
-      [0, 1], [1, 2], [2, 3], [3, 7], [7, 8], [8, 9], [9, 10], [10, 0], // Face
-      [11, 12], [11, 13], [13, 15], [12, 14], [14, 16], // Upper body
-      [11, 23], [12, 24], [23, 24], // Torso
-      [23, 25], [25, 27], [24, 26], [26, 28] // Legs
-    ];
-    
-    // Draw connections
-    POSE_CONNECTIONS.forEach(([startIdx, endIdx]) => {
-      const start = landmarks[startIdx];
-      const end = landmarks[endIdx];
-      
-      if (start && end) {
-        ctx.beginPath();
-        ctx.moveTo(start.x * width, start.y * height);
-        ctx.lineTo(end.x * width, end.y * height);
-        ctx.stroke();
-      }
-    });
-    
-    // Draw points
-    landmarks.forEach((landmark, index) => {
-      if (landmark.visibility > 0.5) {
-        const isKeyPoint = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].includes(index);
-        const radius = isKeyPoint ? 4 : 2;
-        
-        ctx.beginPath();
-        ctx.arc(
-          landmark.x * width,
-          landmark.y * height,
-          radius,
-          0,
-          Math.PI * 2
-        );
-        ctx.fill();
-      }
-    });
-  }, [landmarks, showLandmarks]);
-
-  // Animation loop for simulated detection
-  useEffect(() => {
-    if (!showLandmarks || !isPlaying) {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      return;
+    if (canvas.width !== videoRef.current.videoWidth) {
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
     }
     
-    let frameCount = 0;
-    let lastTime = performance.now();
-    let lastFpsUpdate = lastTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    const animate = (currentTime) => {
-      // Calculate FPS
-      frameCount++;
-      if (currentTime - lastFpsUpdate >= 1000) {
-        setFps(frameCount);
-        frameCount = 0;
-        lastFpsUpdate = currentTime;
+    if (results.poseLandmarks && results.poseLandmarks.length > 0) {
+      if (onLandmarksDetected) {
+        onLandmarksDetected(results.poseLandmarks);
       }
       
-      // Update simulated time
-      setSimulatedTime(prev => prev + 16); // ~60fps
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#00FF00';
+      ctx.fillStyle = '#00FF00';
       
-      // Generate new landmarks
-      const newLandmarks = simulateLandmarks(currentTime);
-      setLandmarks(newLandmarks);
+      const connections = [
+        [11, 12], [11, 13], [13, 15], [12, 14], [14, 16],
+        [11, 23], [12, 24], [23, 24],
+        [23, 25], [25, 27], [24, 26], [26, 28]
+      ];
       
-      // Draw landmarks
-      drawLandmarks();
+      connections.forEach(([start, end]) => {
+        const p1 = results.poseLandmarks[start];
+        const p2 = results.poseLandmarks[end];
+        if (p1 && p2 && p1.visibility > 0.5 && p2.visibility > 0.5) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x * canvas.width, p1.y * canvas.height);
+          ctx.lineTo(p2.x * canvas.width, p2.y * canvas.height);
+          ctx.stroke();
+        }
+      });
       
-      // Continue animation
-      animationFrameRef.current = requestAnimationFrame(animate);
+      results.poseLandmarks.forEach((landmark) => {
+        if (landmark.visibility > 0.5) {
+          ctx.beginPath();
+          ctx.arc(landmark.x * canvas.width, landmark.y * canvas.height, 3, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      });
+    }
+  };
+
+  // Video detection loop
+  useEffect(() => {
+    if (!showLandmarks || !isPoseReady || !videoRef.current) return;
+    
+    const detectFrame = async () => {
+      if (videoRef.current && !videoRef.current.paused && videoRef.current.readyState >= 2) {
+        try {
+          await poseRef.current.send({ image: videoRef.current });
+        } catch (err) {}
+      }
+      animationFrameRef.current = requestAnimationFrame(detectFrame);
     };
     
-    animationFrameRef.current = requestAnimationFrame(animate);
+    animationFrameRef.current = requestAnimationFrame(detectFrame);
     
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [showLandmarks, isPlaying, simulateLandmarks, drawLandmarks]);
+  }, [showLandmarks, isPoseReady]);
 
-  // Update canvas dimensions
-  useEffect(() => {
-    const updateCanvasSize = () => {
-      if (containerRef.current && canvasRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        canvasRef.current.width = rect.width;
-        canvasRef.current.height = rect.height;
-        drawLandmarks();
-      }
-    };
-    
-    updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
-    
-    return () => window.removeEventListener('resize', updateCanvasSize);
-  }, [drawLandmarks]);
+  const videoSrc = videoMap[exerciseType] || studyDefaultVideo;
 
-  // Simulate video play state based on iframe interaction
-  useEffect(() => {
-    const handleMessage = (event) => {
-      if (event.source === containerRef.current?.querySelector('iframe')?.contentWindow) {
-        // Handle YouTube player messages
-        const data = event.data;
-        if (data === 'playing') {
-          setIsPlaying(true);
-        } else if (data === 'paused') {
-          setIsPlaying(false);
-        }
-      }
-    };
-    
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  const togglePlayPause = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <div className="simple-reference-detector">
-      <div className="controls">
-        <h3>Reference Video Analysis</h3>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <div className="detector-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '10px' }}>
+        <h3 style={{ margin: 0 }}>Reference Video</h3>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={togglePlayPause}
+            disabled={!videoLoaded}
             style={{
               padding: '6px 12px',
               backgroundColor: isPlaying ? '#dc3545' : '#28a745',
               color: 'white',
               border: 'none',
               borderRadius: '4px',
-              cursor: 'pointer',
+              cursor: videoLoaded ? 'pointer' : 'not-allowed',
               fontSize: '12px'
             }}
           >
-            {isPlaying ? '⏸ Pause' : '▶ Play'} Simulation
+            {isPlaying ? '⏸ Pause Video' : '▶ Play Video'}
           </button>
-          
           {onToggleLandmarks && (
             <button
               onClick={onToggleLandmarks}
               style={{
                 padding: '6px 12px',
-                backgroundColor: showLandmarks ? 'rgba(0, 100, 0, 0.8)' : 'rgba(100, 0, 0, 0.8)',
+                backgroundColor: showLandmarks ? '#dc3545' : '#28a745',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '12px',
-                fontWeight: 'bold'
+                fontSize: '12px'
               }}
             >
-              {showLandmarks ? '👁‍🗨 Hide Landmarks' : '👁 Show Landmarks'}
+              {showLandmarks ? '🔴 Hide Landmarks' : '🟢 Show Landmarks'}
             </button>
           )}
         </div>
       </div>
       
-      <div 
-        ref={containerRef}
-        style={{ 
-          position: 'relative',
-          width: '100%',
-          backgroundColor: '#000',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          aspectRatio: '16/9'
-        }}
-      >
-        {/* YouTube Video */}
-        <iframe
-          src={youtubeEmbed}
-          title="Posture Reference"
-          allowFullScreen
-          frameBorder="0"
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none'
-          }}
+      <div style={{ position: 'relative', width: '100%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', aspectRatio: '16/9' }}>
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          controls
+          loop
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          onLoadedData={() => setVideoLoaded(true)}
         />
-        
-        {/* Landmarks Overlay */}
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            zIndex: 10
-          }}
-        />
+        {showLandmarks && (
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none'
+            }}
+          />
+        )}
       </div>
       
-      {/* Stats */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between',
-        marginTop: '10px',
-        padding: '8px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '4px',
-        fontSize: '12px'
-      }}>
-        <div>Status: <strong>{isPlaying ? 'Simulating' : 'Paused'}</strong></div>
-        <div>FPS: <strong>{fps}</strong></div>
-        <div>Landmarks: <strong>{landmarks.length}</strong></div>
-        <div>Mode: <strong>Demo Simulation</strong></div>
-      </div>
-      
-      <div style={{ 
-        marginTop: '10px',
-        padding: '10px',
-        backgroundColor: 'rgba(0, 150, 0, 0.05)',
-        borderRadius: '6px',
-        fontSize: '12px'
-      }}>
-        <p style={{ margin: 0, color: '#006400' }}>
-          <strong>Note:</strong> This is a simulation showing how pose detection would work on the reference video.
-          Real detection would require video frame extraction from YouTube.
-        </p>
-      </div>
+      {showLandmarks && (
+        <div style={{ marginTop: '8px', fontSize: '12px', color: '#4ade80', textAlign: 'center' }}>
+          🟢 Pose detection active - Green landmarks show reference posture
+        </div>
+      )}
     </div>
   );
 };

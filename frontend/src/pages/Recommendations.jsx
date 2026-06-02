@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Recommendations.css';
 
@@ -10,12 +10,21 @@ const Recommendations = () => {
   const [recommendations, setRecommendations] = useState(null);
   const [loading, setLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
-  const [chatResponse, setChatResponse] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);  // ✅ Store full chat history
   const [showChat, setShowChat] = useState(false);
+
+  const chatMessagesEndRef = useRef(null); // ✅ Auto-scroll reference
 
   useEffect(() => {
     fetchQuestions();
   }, []);
+
+  // ✅ Auto-scroll to bottom when chat history updates
+  useEffect(() => {
+    if (chatMessagesEndRef.current) {
+      chatMessagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory]);
 
   const fetchQuestions = async () => {
     try {
@@ -51,7 +60,7 @@ const Recommendations = () => {
   const generateRecommendations = async () => {
     setLoading(true);
     const userId = localStorage.getItem('userId') || 'temp_user';
-    
+
     try {
       const response = await fetch('http://localhost:8002/api/recommendations/generate', {
         method: 'POST',
@@ -61,7 +70,7 @@ const Recommendations = () => {
           userId: userId
         })
       });
-      
+
       const data = await response.json();
       setRecommendations(data);
       setCurrentStep(questions.length);
@@ -76,27 +85,45 @@ const Recommendations = () => {
     navigate(`/courses/${courseId}`);
   };
 
+  // ✅ Updated sendChatMessage - stores history and clears input properly
   const sendChatMessage = async () => {
     if (!chatMessage.trim()) return;
-    
+
+    const userMessage = chatMessage.trim();
+
+    // Add user message to chat history
+    setChatHistory(prev => [...prev, { role: 'user', content: userMessage }]);
+    setChatMessage(''); // Clear input immediately
     setLoading(true);
+
     try {
       const response = await fetch('http://localhost:8002/api/recommendations/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: chatMessage,
+          message: userMessage,
           responses: responses
         })
       });
-      
+
       const data = await response.json();
-      setChatResponse(data.response);
-      setChatMessage('');
+
+      // Add AI response to chat history
+      setChatHistory(prev => [...prev, { role: 'assistant', content: data.response }]);
+
     } catch (error) {
       console.error('Error sending chat:', error);
+      setChatHistory(prev => [...prev, { role: 'assistant', content: 'Sorry, I am having trouble connecting. Please try again.' }]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ✅ Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendChatMessage();
     }
   };
 
@@ -104,7 +131,15 @@ const Recommendations = () => {
     setCurrentStep(0);
     setResponses([]);
     setRecommendations(null);
-    setChatResponse('');
+    setChatHistory([]); // ✅ Clear chat history on restart
+    setChatMessage('');
+  };
+
+  // ✅ Clear chat history when closing chat window
+  const handleCloseChat = () => {
+    setShowChat(false);
+    // Optional: Clear chat history when closing? 
+    // setChatHistory([]); // Uncomment if you want to clear on close
   };
 
   if (questions.length === 0) {
@@ -132,8 +167,8 @@ const Recommendations = () => {
           </div>
 
           <div className="progress-bar">
-            <div 
-              className="progress-fill" 
+            <div
+              className="progress-fill"
               style={{ width: `${((currentStep + 1) / questions.length) * 100}%` }}
             ></div>
           </div>
@@ -143,7 +178,7 @@ const Recommendations = () => {
               Question {currentStep + 1} of {questions.length}
             </div>
             <h2 className="question-text">{currentQuestion.question}</h2>
-            
+
             <div className="options-grid">
               {currentQuestion.options.map((option, idx) => (
                 <button
@@ -158,16 +193,16 @@ const Recommendations = () => {
 
             <div className="navigation-buttons">
               {currentStep > 0 && (
-                <button 
+                <button
                   className="nav-btn prev"
                   onClick={() => setCurrentStep(currentStep - 1)}
                 >
                   ← Previous
                 </button>
               )}
-              
+
               {currentStep === questions.length - 1 && (
-                <button 
+                <button
                   className="nav-btn generate"
                   onClick={generateRecommendations}
                   disabled={responses.length < questions.length}
@@ -180,24 +215,38 @@ const Recommendations = () => {
 
           {/* AI Chat Assistant */}
           <div className="ai-chat-assistant">
-            <button 
+            <button
               className="chat-toggle-btn"
               onClick={() => setShowChat(!showChat)}
             >
               💬 Ask AI Assistant
             </button>
-            
+
             {showChat && (
               <div className="chat-window">
                 <div className="chat-header">
                   <h3>🤖 Learning Advisor</h3>
-                  <button onClick={() => setShowChat(false)}>✕</button>
+                  <button onClick={handleCloseChat}>✕</button>
                 </div>
                 <div className="chat-messages">
-                  {chatResponse && (
+                  {chatHistory.length === 0 ? (
                     <div className="chat-bubble ai">
-                      <p>{chatResponse}</p>
+                      <p>Hi! I'm your Learning Advisor. Ask me anything about courses, career paths, or study strategies!</p>
                     </div>
+                  ) : (
+                    <>
+                      {chatHistory.map((msg, idx) => (
+                        <div key={idx} className={`chat-bubble ${msg.role === 'user' ? 'user' : 'ai'}`}>
+                          <p>{msg.content}</p>
+                        </div>
+                      ))}
+                      {loading && (
+                        <div className="chat-bubble ai typing">
+                          <p>Thinking...</p>
+                        </div>
+                      )}
+                      <div ref={chatMessagesEndRef} />
+                    </>
                   )}
                 </div>
                 <div className="chat-input">
@@ -206,9 +255,11 @@ const Recommendations = () => {
                     placeholder="Ask about courses..."
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    onKeyPress={handleKeyPress}
                   />
-                  <button onClick={sendChatMessage}>Send</button>
+                  <button onClick={sendChatMessage} disabled={loading}>
+                    Send
+                  </button>
                 </div>
               </div>
             )}
@@ -239,8 +290,8 @@ const Recommendations = () => {
 
           <div className="rec-courses-grid">
             {recommendations.recommendations.map((rec, idx) => (
-              <div 
-                key={rec.course._id} 
+              <div
+                key={rec.course._id}
                 className="rec-course-card"
                 onClick={() => openCourse(rec.course._id)}
               >
@@ -282,24 +333,38 @@ const Recommendations = () => {
 
           {/* Persistent AI Chat */}
           <div className="floating-chat">
-            <button 
+            <button
               className="floating-chat-btn"
               onClick={() => setShowChat(!showChat)}
             >
               💬 Need more help?
             </button>
-            
+
             {showChat && (
               <div className="chat-window floating">
                 <div className="chat-header">
                   <h3>🤖 Learning Advisor</h3>
-                  <button onClick={() => setShowChat(false)}>✕</button>
+                  <button onClick={handleCloseChat}>✕</button>
                 </div>
                 <div className="chat-messages">
-                  {chatResponse && (
+                  {chatHistory.length === 0 ? (
                     <div className="chat-bubble ai">
-                      <p>{chatResponse}</p>
+                      <p>Hi! I'm your Learning Advisor. Ask me anything about these courses or your learning path!</p>
                     </div>
+                  ) : (
+                    <>
+                      {chatHistory.map((msg, idx) => (
+                        <div key={idx} className={`chat-bubble ${msg.role}`}>
+                          <p>{msg.content}</p>
+                        </div>
+                      ))}
+                      {loading && (
+                        <div className="chat-bubble ai typing">
+                          <p>...</p>
+                        </div>
+                      )}
+                      <div ref={chatMessagesEndRef} />
+                    </>
                   )}
                 </div>
                 <div className="chat-input">
@@ -308,9 +373,11 @@ const Recommendations = () => {
                     placeholder="Ask for more recommendations..."
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    onKeyPress={handleKeyPress}
                   />
-                  <button onClick={sendChatMessage}>Send</button>
+                  <button onClick={sendChatMessage} disabled={loading}>
+                    Send
+                  </button>
                 </div>
               </div>
             )}

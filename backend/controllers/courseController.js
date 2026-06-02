@@ -1,4 +1,5 @@
 const Course = require('../models/Course');
+const CourseProgress = require('../models/CourseProgress');
 
 // ✅ GET ALL COURSES
 exports.listCourses = async (req, res) => {
@@ -23,13 +24,11 @@ exports.getCourseDetail = async (req, res) => {
   }
 };
 
-const Progress = require('../models/Progress');
-
 exports.enrollCourse = async (req, res) => {
   try {
     const { userId, courseId } = req.body;
 
-    const existing = await Progress.findOne({
+    const existing = await CourseProgress.findOne({
       user: userId,
       course: courseId
     });
@@ -38,7 +37,7 @@ exports.enrollCourse = async (req, res) => {
       return res.status(400).json({ message: 'Already enrolled' });
     }
 
-    const progress = await Progress.create({
+    const progress = await CourseProgress.create({
       user: userId,
       course: courseId,
       progressPercent: 0,
@@ -52,19 +51,17 @@ exports.enrollCourse = async (req, res) => {
   }
 };
 
-
 exports.updateVideoProgress = async (req, res) => {
   try {
     const { userId, courseId, videoIndex } = req.body;
 
-    let progress = await Progress.findOne({
+    let progress = await CourseProgress.findOne({
       user: userId,
       course: courseId
     });
 
-    // ✅ create only if not exists
     if (!progress) {
-      progress = await Progress.create({
+      progress = await CourseProgress.create({
         user: userId,
         course: courseId,
         watchedVideos: [],
@@ -72,15 +69,13 @@ exports.updateVideoProgress = async (req, res) => {
       });
     }
 
-    // ✅ avoid duplicate count
     if (!progress.watchedVideos.includes(videoIndex)) {
       progress.watchedVideos.push(videoIndex);
     }
 
     const course = await Course.findById(courseId);
 
-    const percent =
-      (progress.watchedVideos.length / course.videos.length) * 100;
+    const percent = (progress.watchedVideos.length / course.videos.length) * 100;
 
     progress.progressPercent = Math.round(percent);
     progress.completed = percent === 100;
@@ -97,7 +92,7 @@ exports.updateVideoProgress = async (req, res) => {
 exports.checkEnrollment = async (req, res) => {
   const { userId, courseId } = req.body;
 
-  const progress = await Progress.findOne({
+  const progress = await CourseProgress.findOne({
     user: userId,
     course: courseId
   });
@@ -111,8 +106,3 @@ exports.checkEnrollment = async (req, res) => {
     progress: progress.progressPercent
   });
 };
-
-
-
-
-

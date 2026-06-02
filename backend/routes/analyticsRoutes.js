@@ -2,18 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getDailyProgress,
+  getDashboardData,
+  getDailyProgress
+} = require('../controllers/analyticsController');
+
+const {
+  getDailyProgress: getProgressDaily,
   updateProgress,
   seedDummyData
 } = require('../controllers/progressController');
 
-// GET analytics
+// NEW: One API call for all dashboard data
+router.get('/dashboard', getDashboardData);
+
+// Existing endpoints (kept for compatibility)
 router.get('/daily', getDailyProgress);
-
-// POST update progress
 router.post('/update', updateProgress);
-
-// POST seed dummy
 router.post('/seed', seedDummyData);
 
 module.exports = router;

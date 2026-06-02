@@ -2,6 +2,7 @@
 node_modules/
 npm-debug.log*
 yarn-debug.log*
+yarn-debug.log*
 yarn-error.log*
 package-lock.json
 yarn.lock
@@ -13,7 +14,6 @@ backend/.env
 backend/.env.local
 backend/.env.*.local
 
-
 # Backend - Python (AI Support)
 backend/AISupport_backend/ai_venv/
 backend/AISupport_backend/__pycache__/
@@ -21,7 +21,6 @@ backend/AISupport_backend/temp_audio_ai/
 backend/AISupport_backend/*.pyc
 backend/AISupport_backend/.env
 backend/AISupport_backend/.env.local
-backend/AISupport_backend/ai_venv/
 backend/AISupport_backend/venv/
 
 # Backend - Python (root)
@@ -144,11 +143,11 @@ frontend/src/assets/videos/*.mp4
 frontend/src/assets/users_interview/*.webm
 frontend/src/assets/users_interview/*.mp4
 
-# Audio files
-*.mp3
+# Audio files (keep tick.mp3 for timer sound)
 *.wav
 *.ogg
 *.flac
+!frontend/src/assets/tick.mp3
 
 # Project specific
 *.log
@@ -268,12 +267,12 @@ build/
 *.xz
 *.zst
 
-# But keep seed files
+# Keep seed files
 !**/seed.js
 !**/seedCourses.js
 !**/seed-courses.js
 
-# But keep example env
+# Keep example env
 !.env.example
 !.env.sample
 

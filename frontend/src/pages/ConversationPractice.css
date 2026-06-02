@@ -387,7 +387,7 @@
   width: 100%;
   padding: 0.9rem;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-  color: white;
+color: var(--text-secondary);
   border: none;
   border-radius: 10px;
   font-size: 1rem;

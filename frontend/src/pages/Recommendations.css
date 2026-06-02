@@ -476,3 +476,53 @@
 
   
 }
+
+
+/* Chat bubble styles for user messages */
+/* User message bubble - with border to match AI style */
+.recommendation-module .chat-bubble.user {
+  background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
+  color: white;
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  margin-left: auto;
+  max-width: 85%;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-module .chat-bubble.user p {
+  color: white;
+}
+
+.recommendation-module .chat-bubble.ai {
+  background: var(--sl-surface-2);
+  color: var(--sl-text-strong);
+  border: 1px solid var(--sl-border-subtle);
+  margin-right: auto;
+  max-width: 85%;
+}
+
+.recommendation-module .chat-bubble.typing {
+  opacity: 0.7;
+}
+
+.recommendation-module .chat-bubble.typing p {
+  animation: typingDots 1.5s infinite;
+}
+
+@keyframes typingDots {
+  0%, 20% { content: '.'; }
+  40%, 60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+.recommendation-module .chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+

@@ -1,10 +1,56 @@
 virtual environment is set in backend for python posture tracking 
 
+#terminal-1: 
 deactivate
-
-# Activate virtual environment (if using venv)
 cd backend
 venv\Scripts\activate
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+#terminal-2: 
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python ai_support_server.py
+
+#terminal-3: 
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python recommendation_server.py
+
+#terminal-4:
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python writing_service.py
+
+#terminal-5:
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python conversation_service.py
+
+#terminal-6:
+deactivate
+venv\Scripts\activate
+cd backend
+node server.js  
+
+#terminal-7:
+deactivate
+venv\Scripts\activate
+cd frontend
+npm run dev
+
+
+Detailed description
+
+
+# Activate virtual environment (if using venv)
+deactivate
+cd backend
+venv\Scripts\activate
+ai_venv\Scripts\activate
 
 # Install Python packages from requirements.txt
 pip install -r requirements.txt
@@ -22,11 +68,14 @@ pip install -r requirements.txt
 
 # Navigate to AI Support folder
 cd C:\Sudhadocuments\Sem7\project last sem\student_peers\backend\AISupport_backend
-
+deactivate
 cd backend/AISupport_backend
 
 # Activate it
 ai_venv\Scripts\activate
+
+#setup openrouter
+pip install openrouter
 
 # Now install from requirements.txt
 pip install -r requirements.txt
@@ -37,12 +86,32 @@ python ai_support_server.py
 python recommendation_server.py
 
 
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python writing_service.py
+
+
+deactivate
+cd backend/AISupport_backend
+ai_venv\Scripts\activate
+python conversation_service.py
+
+
+deactivate
 venv\Scripts\activate
 npm install
 
 
+
+cd backend
+node seed.js
+
+
+
 cd backend
 node server.js  
+mongodb : sudha2402
 
 cd frontend
 npm run dev
@@ -50,3 +119,24 @@ npm run dev
 const GOOGLE_CLIENT_ID = '1061387661632-on954cpkr7b0611jg1kbkgmr5krg5kb7.apps.googleusercontent.com';
 
 
+API key testing:
+cd C:\Sudhadocuments\Sem7\project last sem\student_peers\backend\AISupport_backend
+
+# Activate the Python AI virtual environment (NOT the Node.js venv)
+deactivate
+ai_venv\Scripts\activate
+pip show requests
+pip install requests
+python test_api.py
+
+python get_models.py
+
+
+
+
+
+
+
+my main branch is master in github
+
+git push -u origin master

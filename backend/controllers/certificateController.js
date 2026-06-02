@@ -3,7 +3,7 @@ const QRCode = require('qrcode');
 const Certificate = require('../models/Certificate');
 const Course = require('../models/Course');
 const User = require('../models/User');
-const Progress = require('../models/Progress');
+const CourseProgress = require('../models/CourseProgress'); // ✅ Changed from Progress
 
 // ===============================
 // GENERATE CERTIFICATE
@@ -23,7 +23,7 @@ exports.generateCertificate = async (req, res) => {
       return res.status(404).json({ message: "User or Course not found" });
     }
 
-    const progress = await Progress.findOne({ user: userId, course: courseId });
+    const progress = await CourseProgress.findOne({ user: userId, course: courseId }); // ✅ Changed
     if (!progress || progress.progressPercent < 100) {
       return res.status(400).json({ message: "Complete course to get certificate" });
     }
@@ -203,9 +203,6 @@ exports.verifyCertificate = async (req, res) => {
   }
 };
 
-
-
-
 // ===============================
 // GET CERTIFICATE DATA (for react-pdf)
 // ===============================
@@ -226,7 +223,7 @@ exports.getCertificateData = async (req, res) => {
       return res.status(404).json({ message: "User or Course not found" });
     }
 
-    const progress = await Progress.findOne({ user: userId, course: courseId });
+    const progress = await CourseProgress.findOne({ user: userId, course: courseId }); // ✅ Changed
     if (!progress || progress.progressPercent < 100) {
       return res.status(400).json({ message: "Complete course to get certificate" });
     }

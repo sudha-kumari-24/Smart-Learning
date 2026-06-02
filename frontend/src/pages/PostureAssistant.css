@@ -308,3 +308,104 @@ button {
 }
 
 
+
+
+/* Timer Controls in Header */
+.timer-controls-header {
+  float: right;
+  text-align: center;
+  background: var(--sl-surface-2);
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--sl-border-subtle);
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.timer-icon {
+  font-size: 20px;
+}
+
+.timer-value {
+  font-size: 24px;
+  font-family: monospace;
+  font-weight: bold;
+  color: var(--sl-accent-main);
+}
+
+.timer-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.timer-btn {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.timer-btn.start {
+  background: #28a745;
+  color: white;
+}
+
+.timer-btn.start:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.timer-btn.pause {
+  background: #ffc107;
+  color: #333;
+}
+
+.timer-btn.pause:hover:not(:disabled) {
+  background: #e0a800;
+  transform: translateY(-1px);
+}
+
+.timer-btn.reset {
+  background: #6c757d;
+  color: white;
+}
+
+.timer-btn.reset:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.timer-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .timer-controls-header {
+    float: none;
+    margin-bottom: 15px;
+    display: inline-block;
+  }
+  
+  .timer-value {
+    font-size: 18px;
+  }
+  
+  .timer-btn {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+}
+
+
