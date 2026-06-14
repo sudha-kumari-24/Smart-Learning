@@ -1,4 +1,3 @@
-/* Interview Scenarios Styles */
 .interview-scenarios-page {
   padding: 2rem;
   max-width: 1400px;
@@ -111,7 +110,7 @@
   opacity: 0.9;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .interview-scenarios-page {
     padding: 1rem;

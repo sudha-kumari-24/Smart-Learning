@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const StudySession = require('../models/StudySession');
 const CourseProgress = require('../models/CourseProgress');
 
-// Get all dashboard data in one API call
+
 exports.getDashboardData = async (req, res) => {
   try {
     const { userId } = req.query;
@@ -13,19 +13,19 @@ exports.getDashboardData = async (req, res) => {
 
     const today = new Date().toISOString().split('T')[0];
     
-    // Calculate date 7 days ago
+    
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
     const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
 
-    // 1. Today's total minutes
+   
     const todayResult = await StudySession.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userId), date: today } },
       { $group: { _id: null, total: { $sum: '$minutesStudied' } } }
     ]);
     const todayMinutes = todayResult[0]?.total || 0;
 
-    // 2. Total study hours (all time)
+    
     const totalResult = await StudySession.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userId) } },
       { $group: { _id: null, total: { $sum: '$minutesStudied' } } }
@@ -34,7 +34,7 @@ exports.getDashboardData = async (req, res) => {
     const totalHours = Math.floor(totalMinutes / 60);
     const totalRemainingMinutes = totalMinutes % 60;
 
-    // 3. Study streak (consecutive days with study)
+   
     const allSessions = await StudySession.find({ user: userId })
       .sort({ date: -1 })
       .select('date');
@@ -52,7 +52,7 @@ exports.getDashboardData = async (req, res) => {
       }
     }
 
-    // 4. Weekly study trend (last 7 days)
+    
     const weeklyResult = await StudySession.aggregate([
       { 
         $match: { 
@@ -69,7 +69,7 @@ exports.getDashboardData = async (req, res) => {
       { $sort: { _id: 1 } }
     ]);
     
-    // Fill missing dates with 0
+    
     const weeklyData = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date();
@@ -83,7 +83,7 @@ exports.getDashboardData = async (req, res) => {
       });
     }
 
-    // 5. Study by session type (for pie chart)
+    
     const typeResult = await StudySession.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userId) } },
       { $group: { _id: '$sessionType', total: { $sum: '$minutesStudied' } } }
@@ -100,13 +100,13 @@ exports.getDashboardData = async (req, res) => {
       }
     });
 
-    // 6. Courses completed
+    
     const completedCourses = await CourseProgress.countDocuments({
       user: userId,
       completed: true
     });
 
-    // 7. Daily goal (default 120 minutes)
+    
     const dailyGoal = 120;
     const percentComplete = Math.min((todayMinutes / dailyGoal) * 100, 100);
 
@@ -129,7 +129,7 @@ exports.getDashboardData = async (req, res) => {
   }
 };
 
-// Get daily progress for chart (kept for compatibility)
+
 exports.getDailyProgress = async (req, res) => {
   try {
     const { userId, days = 7 } = req.query;
@@ -158,7 +158,7 @@ exports.getDailyProgress = async (req, res) => {
       { $sort: { _id: 1 } }
     ]);
 
-    // Fill missing dates
+  
     const dailyData = [];
     for (let i = 0; i < days; i++) {
       const date = new Date();

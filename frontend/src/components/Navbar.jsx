@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+
 import React, { useContext, useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Navbar.css';
@@ -16,7 +16,7 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Handle scroll effect
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -60,7 +60,7 @@ function Navbar() {
 
   return (
     <>
-      {/* TOP BAR - Enhanced */}
+      
       <header className={`nav-header-enhanced ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-left-enhanced">
           <div className="nav-logo-enhanced">
@@ -75,7 +75,7 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
+        
         {isDesktop && (
           <nav className="nav-links-enhanced">
             {navItems.map((item) => (
@@ -95,7 +95,7 @@ function Navbar() {
         )}
 
         <div className="nav-right-enhanced">
-          {/* Search Button */}
+        
           {isDesktop && (
             <div className="search-wrapper">
               <button
@@ -119,7 +119,7 @@ function Navbar() {
             </div>
           )}
 
-          {/* Theme Toggle - Enhanced */}
+         
           <button type="button" className="theme-toggle-enhanced" onClick={toggleTheme}>
             <div className={`theme-toggle-track ${theme === 'light' ? 'light' : 'dark'}`}>
               <div className="theme-toggle-thumb">
@@ -131,7 +131,7 @@ function Navbar() {
             </span>
           </button>
 
-          {/* User Section - Desktop */}
+        
           {isDesktop && user && (
             <div className="user-menu-enhanced">
               <div className="user-avatar-wrapper">
@@ -152,7 +152,7 @@ function Navbar() {
             </div>
           )}
 
-          {/* Auth Links - Desktop */}
+      
           {isDesktop && !user && (
             <div className="auth-buttons-enhanced">
               <NavLink to="/login" className="auth-btn login">Sign In</NavLink>
@@ -160,7 +160,6 @@ function Navbar() {
             </div>
           )}
 
-          {/* Hamburger Menu - Mobile */}
           {!isDesktop && (
             <button
               type="button"
@@ -175,7 +174,6 @@ function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu - Enhanced */}
         {!isDesktop && (
           <div className={`mobile-menu-enhanced ${open ? 'open' : ''}`}>
             <div className="mobile-menu-header">
@@ -235,7 +233,7 @@ function Navbar() {
         )}
       </header>
 
-      {/* SIDEBAR - Desktop Enhanced */}
+     
       {isDesktop && (
         <div className={`sidebar-enhanced ${scrolled ? 'scrolled' : ''}`}>
           <div className="sidebar-header-enhanced">

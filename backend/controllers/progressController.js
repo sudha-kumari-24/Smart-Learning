@@ -1,6 +1,6 @@
 const StudySession = require('../models/StudySession');
 
-// ---------- SEED DUMMY DATA ----------
+
 exports.seedDummyData = async (req, res) => {
   const { userId } = req.body;
 
@@ -39,7 +39,7 @@ exports.seedDummyData = async (req, res) => {
   }
 };
 
-// ---------- GET DAILY PROGRESS (for backward compatibility) ----------
+
 exports.getDailyProgress = async (req, res) => {
   const { userId, days = 7 } = req.query;
 
@@ -77,7 +77,7 @@ exports.getDailyProgress = async (req, res) => {
   }
 };
 
-// ---------- UPDATE PROGRESS (TIMER) ----------
+
 exports.updateProgress = async (req, res) => {
   const { userId, seconds, sessionType = 'timer' } = req.body;
 
@@ -91,7 +91,7 @@ exports.updateProgress = async (req, res) => {
   console.log(`[PROGRESS] user=${userId} minutes=${minutes} date=${today} type=${sessionType}`);
 
   try {
-    // Find or create study session for today
+    
     let session = await StudySession.findOne({
       user: userId,
       date: today,
@@ -110,7 +110,7 @@ exports.updateProgress = async (req, res) => {
       });
     }
 
-    // Also update total minutes for the day (regardless of type) for quick response
+    
     const totalToday = await StudySession.aggregate([
       { $match: { user: userId, date: today } },
       { $group: { _id: null, total: { $sum: '$minutesStudied' } } }

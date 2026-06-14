@@ -1,4 +1,4 @@
-/* Interview Practice Styles */
+
 .interview-practice-page {
   padding: 2rem;
   max-width: 1400px;
@@ -36,7 +36,7 @@
   }
 }
 
-/* Video Panel */
+
 .video-panel {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -147,7 +147,7 @@
   background: #b91c1c;
 }
 
-/* Questions Panel */
+
 .questions-panel {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -326,7 +326,7 @@
   opacity: 0.9;
 }
 
-/* Speaking indicators */
+
 .question-status {
   margin-bottom: 1.5rem;
   padding: 1rem;
@@ -388,7 +388,7 @@
   text-align: center;
 }
 
-/* Results panel updates */
+
 .results-subtitle {
   color: var(--sl-text-muted);
   margin-bottom: 2rem;
@@ -404,7 +404,6 @@
 
 
 
-/* Responsive */
 @media (max-width: 768px) {
   .interview-practice-page {
     padding: 1rem;
@@ -426,14 +425,14 @@
 
 
 
-/* Canvas preview styling */
+
 .canvas-preview {
   width: 100%;
   background: #000;
   border-radius: 12px;
 }
 
-/* Transcript preview in results */
+
 .transcript-preview {
   margin-top: 1.5rem;
   padding: 1rem;
@@ -463,7 +462,7 @@
   color: var(--sl-accent-main);
 }
 
-/* Additional styles for the enhanced interview */
+
 .btn-success {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;

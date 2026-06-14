@@ -199,7 +199,7 @@ function EditProfile() {
     return (
         <section className="edit-profile-page">
             <div className="edit-profile-container">
-                {/* Header */}
+              
                 <div className="edit-profile-header">
                     <button className="back-btn" onClick={() => navigate('/profile')}>
                         ← Back to Profile
@@ -209,7 +209,7 @@ function EditProfile() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="edit-profile-form">
-                    {/* Personal Information Section */}
+                   
                     <div className="form-section">
                         <div className="section-title">
                             <span className="section-icon">👤</span>
@@ -280,7 +280,7 @@ function EditProfile() {
                         </div>
                     </div>
 
-                    {/* Academic Information Section */}
+                   
                     <div className="form-section">
                         <div className="section-title">
                             <span className="section-icon">🎓</span>
@@ -312,7 +312,7 @@ function EditProfile() {
                         </div>
                     </div>
 
-                    {/* Study Preferences Section */}
+                  
                     <div className="form-section">
                         <div className="section-title">
                             <span className="section-icon">⚙️</span>
@@ -362,7 +362,7 @@ function EditProfile() {
                         </div>
                     </div>
 
-                    {/* Focus Areas Section */}
+                 
                     <div className="form-section">
                         <div className="section-title">
                             <span className="section-icon">🎯</span>
@@ -422,7 +422,7 @@ function EditProfile() {
                         </div>
                     </div>
 
-                    {/* Form Actions */}
+                    
                     <div className="form-actions">
                         <button type="button" className="cancel-btn" onClick={() => navigate('/profile')}>
                             Cancel

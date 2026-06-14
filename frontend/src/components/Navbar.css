@@ -1,6 +1,4 @@
-/* ===== ENHANCED NAVBAR STYLES ===== */
 
-/* Top Bar */
 .nav-header-enhanced {
   /* position: fixed; */
   top: 0;
@@ -24,7 +22,7 @@
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo */
+
 .nav-logo-enhanced {
   display: flex;
   align-items: center;
@@ -141,14 +139,13 @@
   transform: scale(1.05);
 }
 
-/* Right Section */
+
 .nav-right-enhanced {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-/* Search */
 .search-wrapper {
   position: relative;
 }
@@ -262,7 +259,6 @@
   font-weight: 500;
 }
 
-/* User Menu */
 .user-menu-enhanced {
   position: relative;
 }
@@ -348,7 +344,7 @@
   border-top: 1px solid var(--sl-border-subtle);
 }
 
-/* Auth Buttons */
+
 .auth-buttons-enhanced {
   display: flex;
   gap: 0.5rem;
@@ -384,7 +380,7 @@
   box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
 }
 
-/* Hamburger Menu */
+
 .hamburger-enhanced {
   width: 45px;
   height: 45px;
@@ -420,7 +416,7 @@
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Mobile Menu */
+
 .mobile-menu-enhanced {
   position: fixed;
   top: 70px;
@@ -558,7 +554,7 @@
   cursor: pointer;
 }
 
-/* Sidebar */
+
 .sidebar-enhanced {
   position: fixed;
   top: 0;
@@ -670,7 +666,7 @@
   border-color: var(--sl-accent-alt);
 }
 
-/* Animations */
+
 @keyframes iconFloat {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-3px); }
@@ -697,7 +693,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 818px) {
   .nav-header-enhanced {
     left: 0;
@@ -720,7 +715,7 @@
   }
 }
 
-/* Scrollbar */
+
 .sidebar-enhanced::-webkit-scrollbar {
   width: 4px;
 }

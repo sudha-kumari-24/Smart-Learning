@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#ffffff',
         position: 'relative',
-        overflow: 'hidden', // Ensures shapes don't cause scrollbars
+        overflow: 'hidden',
     },
     shapeTopLeft: {
         position: 'absolute',
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     nameContainer: {
         textAlign: 'center',
         borderBottom: '2px solid #1a237e',
-        alignSelf: 'center', // Centers the container itself
+        alignSelf: 'center', 
         marginBottom: 10,
         paddingBottom: 5,
     },
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-end', // Aligns signature and QR horizontally
-        marginTop: 'auto', // Pushes footer to bottom of content area
+        alignItems: 'flex-end', 
+        marginTop: 'auto', 
         paddingHorizontal: 20,
     },
     sigBlock: {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         width: 100,
     },
     qrImage: {
-        width: 80, // Increased size
+        width: 80, 
         height: 80,
         marginBottom: 5,
     },

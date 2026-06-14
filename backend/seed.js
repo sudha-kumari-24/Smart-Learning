@@ -13,7 +13,7 @@ async function seed() {
   try {
     await connectDB();
 
-    // 1) Clear old data
+    //Clearing old data
     await Promise.all([
       Course.deleteMany({}),
       User.deleteMany({}),
@@ -27,7 +27,7 @@ async function seed() {
     console.log('Cleared existing collections');
 
 
-    // Drop index if exists
+    
     try {
       await Course.collection.dropIndex('level_1');
       console.log('✅ Dropped unique index on level field');
@@ -36,7 +36,7 @@ async function seed() {
     }
 
 
-    // 2) Insert users
+    //Insert users
     const users = await User.insertMany([
       {
         fullName: 'Sudha Kumari',
@@ -56,7 +56,7 @@ async function seed() {
 
     console.log(`Inserted ${users.length} users`);
 
-    // 3) Insert courses
+    //Insert courses
     const coursesData = [
       {
         title: 'Data Structures Essentials',
@@ -149,7 +149,7 @@ async function seed() {
     }
     console.log(`Inserted ${courses.length} courses`);
 
-    // 4) Insert some course progress for demo user
+    // Insert some course progress for demo user
     const demoUser = users[0];
     await CourseProgress.updateOne(
       { user: demoUser._id, course: courses[0]._id },
@@ -165,7 +165,7 @@ async function seed() {
     );
     console.log('Inserted course progress records');
 
-    // 5) Insert study sessions (timer data)
+    // Insert study sessions (timer data)
     await StudySession.insertMany([
       { user: demoUser._id, date: '2025-01-01', minutesStudied: 30, sessionType: 'timer' },
       { user: demoUser._id, date: '2025-01-02', minutesStudied: 45, sessionType: 'timer' },
@@ -173,7 +173,7 @@ async function seed() {
     ]);
     console.log('Inserted study sessions');
 
-    // 6) Insert demo call request
+    // Insert demo call request
     await CallRequest.create({
       user: demoUser._id,
       topic: 'stress',
@@ -181,7 +181,7 @@ async function seed() {
     });
     console.log('Inserted sample call request');
 
-    // 7) Insert interview sessions
+    // Insert interview sessions
     await InterviewSession.insertMany([
       {
         userId: demoUser._id,
@@ -203,10 +203,12 @@ async function seed() {
         createdAt: new Date('2025-01-09')
       }
     ]);
+    
     console.log('Inserted sample interview sessions');
 
     console.log('Seeding completed ✅');
     process.exit(0);
+
   } catch (err) {
     console.error('Seeding error:', err);
     process.exit(1);

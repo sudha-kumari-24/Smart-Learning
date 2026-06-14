@@ -1,4 +1,4 @@
-/* Communication Trainer Styles */
+
 .comm-page {
   padding: 2rem;
   max-width: 1400px;
@@ -94,7 +94,7 @@
   opacity: 0.9;
 }
 
-/* Dark mode adjustments */
+
 [data-theme="dark"] .comm-card {
   background: var(--sl-surface-1);
   border-color: var(--sl-border-subtle);
@@ -105,7 +105,7 @@
   border-color: var(--sl-border-subtle);
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .comm-page {
     padding: 1rem;

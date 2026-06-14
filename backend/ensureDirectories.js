@@ -5,13 +5,13 @@ const baseDir = process.cwd();
 console.log('Base directory:', baseDir);
 
 const directories = [
-  // For interview videos (frontend assets)
+ 
   path.join(baseDir, 'frontend', 'src', 'assets', 'users_interview'),
   
-  // For backend assets (if needed)
+ 
   path.join(baseDir, 'backend', 'assets', 'users_interview'),
   
-  // Other directories you might need
+ 
   path.join(baseDir, 'backend', 'posture_logs'),
   path.join(baseDir, 'backend', 'videos')
 ];

@@ -1,4 +1,4 @@
-// ReferenceVideoLandmarksDetector.jsx
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const ReferenceVideoLandmarksDetector = ({ 
@@ -19,16 +19,16 @@ const ReferenceVideoLandmarksDetector = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Initialize MediaPipe Pose
+
   useEffect(() => {
     const initMediaPipe = () => {
-      // Check if MediaPipe is already loaded
+     
       if (window.Pose) {
         initializePoseDetector();
         return;
       }
 
-      // Load MediaPipe Pose script
+     
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675472400/pose.js';
       script.onload = () => {
@@ -86,28 +86,28 @@ const ReferenceVideoLandmarksDetector = ({
     };
   }, []);
 
-  // Handle pose detection results
+  
   const onPoseResults = useCallback((results) => {
     if (!canvasRef.current || !showLandmarks) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
-    // Clear previous drawings
+   
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (results.poseLandmarks) {
       const landmarks = results.poseLandmarks;
       setLandmarksCount(landmarks.length);
       
-      // Set drawing style - ALWAYS GREEN for reference video
+     
       ctx.lineWidth = 2;
       ctx.strokeStyle = '#00FF00';
       ctx.fillStyle = '#00FF00';
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
-      // Draw connections (using MediaPipe's POSE_CONNECTIONS if available)
+      
       const connections = window.POSE_CONNECTIONS || getDefaultConnections();
       
       connections.forEach(([start, end]) => {
@@ -123,7 +123,7 @@ const ReferenceVideoLandmarksDetector = ({
         }
       });
 
-      // Draw landmark points
+     
       landmarks.forEach((landmark, index) => {
         if (landmark.visibility > 0.5) {
           const isKeyPoint = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].includes(index);
@@ -145,7 +145,7 @@ const ReferenceVideoLandmarksDetector = ({
     }
   }, [showLandmarks]);
 
-  // Default connections if POSE_CONNECTIONS is not available
+  
   const getDefaultConnections = () => [
     [0, 1], [1, 2], [2, 3], [3, 7], [7, 8], [8, 9], [9, 10], [10, 0], // Face
     [11, 12], [11, 13], [13, 15], [12, 14], [14, 16], // Upper body
@@ -153,13 +153,13 @@ const ReferenceVideoLandmarksDetector = ({
     [23, 25], [25, 27], [24, 26], [26, 28] // Legs
   ];
 
-  // Setup YouTube player
+  
   useEffect(() => {
     if (!youtubeId || !isInitialized) return;
 
     const loadYouTubePlayer = () => {
       if (!window.YT || !window.YT.Player) {
-        // Load YouTube IFrame API
+      
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -206,17 +206,17 @@ const ReferenceVideoLandmarksDetector = ({
     loadYouTubePlayer();
   }, [youtubeId, isInitialized]);
 
-  // Setup video capture from YouTube player
+ 
   const setupVideoCapture = (player) => {
     if (!canvasRef.current) return;
 
-    // Create a video element to capture frames
+   
     const video = document.createElement('video');
     video.style.display = 'none';
     video.crossOrigin = 'anonymous';
     document.body.appendChild(video);
 
-    // Update canvas dimensions based on video
+   
     const updateCanvasSize = () => {
       const container = videoContainerRef.current;
       if (container && canvasRef.current) {
@@ -229,7 +229,7 @@ const ReferenceVideoLandmarksDetector = ({
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
 
-    // Start detection loop when video plays
+   
     const startDetection = () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -243,10 +243,10 @@ const ReferenceVideoLandmarksDetector = ({
         }
 
         try {
-          // Get current time from video (approximation)
+         
           const currentTime = performance.now();
           
-          // Calculate FPS
+        
           fpsCounterRef.current++;
           if (currentTime - lastFpsUpdateRef.current >= 1000) {
             setFps(fpsCounterRef.current);
@@ -254,16 +254,13 @@ const ReferenceVideoLandmarksDetector = ({
             lastFpsUpdateRef.current = currentTime;
           }
 
-          // Send frame to pose detector (simulated - we don't have actual video element)
-          // In a real implementation, you'd need to extract frames from YouTube
-          // This is a simplified version
+         
           if (canvasRef.current) {
             const ctx = canvasRef.current.getContext('2d');
-            // For now, we'll skip actual frame capture from YouTube
-            // due to CORS restrictions
+           
           }
 
-          // Schedule next frame
+         
           animationFrameRef.current = requestAnimationFrame(detectLoop);
         } catch (err) {
           console.error('Detection error:', err);
@@ -290,7 +287,7 @@ const ReferenceVideoLandmarksDetector = ({
     };
   };
 
-  // Simplified detection start/stop
+ 
   const startDetection = useCallback(() => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -325,7 +322,7 @@ const ReferenceVideoLandmarksDetector = ({
     }
   }, []);
 
-  // Handle play state changes
+  
   useEffect(() => {
     if (isPlaying && showLandmarks) {
       startDetection();
@@ -396,7 +393,7 @@ const ReferenceVideoLandmarksDetector = ({
           aspectRatio: '16/9'
         }}
       >
-        {/* YouTube Player */}
+    
         <div 
           id={`youtube-player-${youtubeId}`}
           style={{
@@ -405,7 +402,7 @@ const ReferenceVideoLandmarksDetector = ({
           }}
         />
         
-        {/* Landmarks Canvas Overlay */}
+       
         <canvas
           ref={canvasRef}
           style={{

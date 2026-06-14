@@ -298,7 +298,7 @@ class RecommendationService:
         except Exception as e:
             print(f"AI chat error: {e}")
         
-        # Fallback responses if API fails
+       
         fallbacks = [
             "I'd recommend checking out our courses in Data Science, Web Development, or Soft Skills based on your interests. Which area excites you most?",
             "That's a great question! Based on your learning goals, I suggest exploring our recommended courses above. Would you like more details on any specific course?",

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import { useAuth } from '../context/AuthContext';
 
-// Import images
+
 import interactImage from '../assets/comm/interact.jpg';
 import interviewImage from '../assets/comm/interview.jpg';
 import writingImage from '../assets/comm/writing.jpg';
@@ -18,7 +18,7 @@ function Home() {
     satisfaction: 0
   });
 
-  // Animated counter for stats
+  
   useEffect(() => {
     const targetStats = {
       students: 15000,
@@ -67,7 +67,7 @@ function Home() {
 
   return (
     <div className="home-module">
-      {/* Hero Section with Image Collage */}
+     
       <section className="home-hero-enhanced">
         <div className="home-hero-content-enhanced">
           <div className="home-badge-enhanced">
@@ -93,7 +93,7 @@ function Home() {
             </Link>
           </div>
           
-          {/* Stats Section */}
+         
           <div className="home-stats-enhanced">
             <div className="stat-item-enhanced">
               <div className="stat-number-enhanced">{stats.students.toLocaleString()}+</div>
@@ -112,16 +112,16 @@ function Home() {
           </div>
         </div>
         
-        {/* Image Collage Section with Floating Tags */}
+       
         <div className="home-hero-visual-enhanced">
           <div className="image-collage">
-            {/* Center Image */}
+         
             <div className="collage-main">
               <img src={scholarsImage} alt="Scholars" className="main-image" />
               <div className="main-image-glow"></div>
             </div>
             
-            {/* 4 Boundary Images */}
+          
             <div className="collage-item item-top">
               <img src={interactImage} alt="Interaction" />
               <div className="item-label">Communication</div>
@@ -139,7 +139,7 @@ function Home() {
               <div className="item-label">Wellness</div>
             </div>
             
-            {/* Floating Tags around the circle */}
+            
             {floatingTags.map((tag, index) => (
               <div key={index} className={`floating-tag ${tag.position}`} style={{ animationDelay: `${tag.delay * 0.3}s` }}>
                 {tag.text}
@@ -149,7 +149,7 @@ function Home() {
         </div>
       </section>
       
-      {/* Features Section - Compact */}
+    
       <section className="home-features-compact">
         <div className="section-header-compact">
           <h2>Everything You Need</h2>
@@ -174,7 +174,7 @@ function Home() {
         </div>
       </section>
       
-      {/* Testimonials Section - Compact */}
+    
       <section className="home-testimonials-compact">
         <div className="section-header-compact">
           <h2>Student Love</h2>
@@ -197,7 +197,7 @@ function Home() {
         </div>
       </section>
       
-      {/* CTA Section - Compact */}
+    
       <section className="home-cta-compact">
         <div className="cta-content-compact">
           <h2>Ready to Transform Your Learning?</h2>

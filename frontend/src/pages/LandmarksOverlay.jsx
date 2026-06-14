@@ -1,4 +1,4 @@
-// LandmarksOverlay.jsx - NEW SEPARATE MODULE
+
 import React, { useEffect, useRef } from 'react';
 
 const LandmarksOverlay = ({ 
@@ -28,33 +28,31 @@ const LandmarksOverlay = ({
         position: 'absolute',
         top: 0,
         left: 0,
-        pointerEvents: 'none', // Allows clicks to pass through to video
+        pointerEvents: 'none',
         zIndex: 10
       }}
     />
   );
 };
 
-// Drawing function
+
 const drawLandmarks = (ctx, landmarks, status, width, height) => {
-  // Clear canvas
+
   ctx.clearRect(0, 0, width, height);
   
   if (!landmarks || landmarks.length === 0) return;
   
-  // Set colors based on status
+ 
   const lineColor = status === 'correct' ? '#00ff00' : '#ff0000';
   const pointColor = status === 'correct' ? '#00cc00' : '#cc0000';
   
-  // Draw connections between landmarks (simplified example)
+ 
   ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2;
   
-  // Example: Draw connections between key points
-  // You'll need to define the exact connections based on your 33 landmarks
+  
   const connections = [
-    [0, 1], [1, 2], [2, 3], // Example connections
-    // Add all your 33 landmark connections here
+    [0, 1], [1, 2], [2, 3], 
   ];
   
   connections.forEach(([startIdx, endIdx]) => {
@@ -66,7 +64,7 @@ const drawLandmarks = (ctx, landmarks, status, width, height) => {
     }
   });
   
-  // Draw individual landmarks
+ 
   ctx.fillStyle = pointColor;
   landmarks.forEach((landmark) => {
     if (landmark && landmark.x && landmark.y) {

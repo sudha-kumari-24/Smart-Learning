@@ -18,7 +18,7 @@ function InterviewPractice() {
   const streamRef = useRef(null);
   const recognitionRef = useRef(null);
 
-  // Pre-defined fallback questions
+
   const fallbackQuestions = {
     software: [
       "Tell me about yourself and your software development experience.",
@@ -66,9 +66,9 @@ function InterviewPractice() {
   const [isListening, setIsListening] = useState(false);
   const [fallbackIndex, setFallbackIndex] = useState(0);
 
-  const openrouterApiKey = 'YOUR_OPENROUTER_API_KEY'; // Replace with your .env variable
+  const openrouterApiKey = 'YOUR_OPENROUTER_API_KEY'; 
 
-  // Initialize speech recognition (hidden transcription)
+ 
   const initSpeechRecognition = () => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -91,7 +91,7 @@ function InterviewPractice() {
           }
         }
         
-        // Store the transcribed answer (hidden from UI)
+       
         setTranscribedAnswer(finalTranscript.trim());
       };
       
@@ -105,7 +105,7 @@ function InterviewPractice() {
     }
   };
 
-  // Start listening for user's answer (hidden)
+
   const startListeningForAnswer = () => {
     if (recognitionRef.current && !isListening) {
       setTranscribedAnswer('');
@@ -114,7 +114,7 @@ function InterviewPractice() {
     }
   };
 
-  // Stop listening
+ 
   const stopListening = () => {
     if (recognitionRef.current && isListening) {
       recognitionRef.current.stop();
@@ -122,7 +122,7 @@ function InterviewPractice() {
     }
   };
 
-  // Get AI-generated next question based on user's answer
+  
   const getNextQuestionFromAI = async (userAnswer) => {
     setAiLoading(true);
     
@@ -170,7 +170,7 @@ function InterviewPractice() {
     }
   };
 
-  // Get fallback question from pre-defined list
+ 
   const getFallbackQuestion = () => {
     const questions = fallbackQuestions[interviewType] || fallbackQuestions.general;
     const nextIndex = fallbackIndex % questions.length;
@@ -178,7 +178,7 @@ function InterviewPractice() {
     return questions[nextIndex];
   };
 
-  // Speak text
+  
   const speakText = (text) => {
     return new Promise((resolve) => {
       if ('speechSynthesis' in window) {
@@ -201,54 +201,54 @@ function InterviewPractice() {
     });
   };
 
-  // Ask current question
+  
   const askQuestion = async (questionText) => {
     setCurrentQuestion(questionText);
     setWaitingForAnswer(false);
     
-    // Speak the question
+   
     await speakText(questionText);
     
-    // Start listening for user's answer
+   
     setTimeout(() => {
       setWaitingForAnswer(true);
       startListeningForAnswer();
     }, 500);
   };
 
-  // Handle "Next Question" button click
+  
   const handleNextQuestion = async () => {
     if (!waitingForAnswer) return;
     
-    // Stop listening
+    
     stopListening();
     setWaitingForAnswer(false);
     
-    // Get the transcribed answer
+  
     const userAnswer = transcribedAnswer || "[User's answer captured in video]";
     
-    // Save to conversation history
+    
     setConversationHistory(prev => [...prev, 
       { role: 'user', content: userAnswer },
       { role: 'assistant', content: currentQuestion }
     ]);
     
-    // Check time limit
+   
     if (recordingTime >= (interviewDuration * 60) - 10) {
       await speakText("Time's up! Thank you for your participation.");
       stopRecordingAndGenerateReport();
       return;
     }
     
-    // Get next question from AI (based on user's answer)
+    
     const nextQuestion = await getNextQuestionFromAI(userAnswer);
     setCurrentQuestionNum(prev => prev + 1);
     
-    // Ask the next question
+   
     setTimeout(() => askQuestion(nextQuestion), 500);
   };
 
-  // Start recording
+  
   const startRecording = async () => {
     if (permissionStatus.camera !== 'granted' || permissionStatus.microphone !== 'granted') {
       show('Please grant permissions first', 'error');
@@ -256,16 +256,16 @@ function InterviewPractice() {
     }
     
     try {
-      // Initialize speech recognition
+      
       initSpeechRecognition();
       
-      // Reset states
+    
       setConversationHistory([]);
       setCurrentQuestionNum(1);
       setFallbackIndex(0);
       recordedChunksRef.current = [];
       
-      // Start media recorder
+      
       mediaRecorderRef.current = new MediaRecorder(streamRef.current, {
         mimeType: 'video/webm;codecs=vp9,opus'
       });
@@ -285,7 +285,7 @@ function InterviewPractice() {
       setIsRecording(true);
       setInterviewStarted(true);
       
-      // Start timer
+      
       const interval = setInterval(() => {
         setRecordingTime(prev => {
           if (prev >= interviewDuration * 60) {
@@ -301,12 +301,12 @@ function InterviewPractice() {
       
       setTimerInterval(interval);
       
-      // Get first question (from fallback or API)
+      
       const firstQuestion = getFallbackQuestion();
       setCurrentQuestion(firstQuestion);
       setConversationHistory([{ role: 'assistant', content: firstQuestion }]);
-      
-      // Welcome and first question
+     
+
       await speakText(`Welcome to your ${interviewType} interview practice. You have ${interviewDuration} minutes.`);
       setTimeout(() => askQuestion(firstQuestion), 1000);
       
@@ -316,14 +316,14 @@ function InterviewPractice() {
     }
   };
 
-  // Handle time up
+  
   const handleTimeUp = async () => {
     stopListening();
     await speakText("Time's up! Thank you for your participation.");
     stopRecordingAndGenerateReport();
   };
 
-  // Save recording
+  
   const saveRecording = async (blob) => {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -354,7 +354,7 @@ function InterviewPractice() {
     } catch (error) {
       console.error('Server error, saving locally:', error);
       
-      // Fallback: Download locally
+      
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -368,8 +368,9 @@ function InterviewPractice() {
     }
   };
 
-  // Generate report
+  
   const generateReport = () => {
+
     const totalQuestions = conversationHistory.filter(m => m.role === 'assistant').length;
     const answeredQuestions = conversationHistory.filter(m => m.role === 'user').length;
     const score = Math.min(100, Math.floor((answeredQuestions / Math.max(totalQuestions, 1)) * 100));
@@ -394,7 +395,7 @@ function InterviewPractice() {
     return { totalQuestions, answeredQuestions, score, level, feedback, duration: recordingTime };
   };
 
-  // Stop recording and show report
+  
   const stopRecordingAndGenerateReport = () => {
     stopListening();
     
@@ -418,7 +419,7 @@ function InterviewPractice() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Request permissions
+
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -524,7 +525,7 @@ function InterviewPractice() {
           ) : null}
         </div>
 
-        {/* Right Panel - Interview Content */}
+       
         <div className="questions-panel">
           {!showResults ? (
             <>

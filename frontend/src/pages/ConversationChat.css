@@ -1,4 +1,4 @@
-/* Conversation Chat Styles */
+
 .conversation-chat-page {
   padding: 1rem;
   max-width: 1200px;
@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-/* Header */
+
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -47,7 +47,7 @@
   background: #dc2626;
 }
 
-/* Chat Container */
+
 .chat-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -62,7 +62,7 @@
   }
 }
 
-/* Chat Messages */
+
 .chat-messages {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -203,7 +203,7 @@
   margin-right: 0.5rem;
 }
 
-/* Controls Panel */
+
 .controls-panel {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -283,7 +283,7 @@
   font-weight: 500;
 }
 
-/* Text Input */
+
 .text-input-container {
   display: flex;
   gap: 0.5rem;
@@ -323,7 +323,7 @@
   cursor: not-allowed;
 }
 
-/* Progress */
+
 .conversation-progress {
   background: var(--sl-surface-2);
   border-radius: 8px;
@@ -353,7 +353,7 @@
   transition: width 0.3s ease;
 }
 
-/* Quick Tips */
+
 .quick-tips {
   background: var(--sl-surface-2);
   border-radius: 8px;
@@ -381,7 +381,7 @@
   margin-bottom: 0.25rem;
 }
 
-/* Status Indicator */
+
 .status-indicator {
   position: fixed;
   bottom: 2rem;
@@ -441,7 +441,7 @@
   50% { opacity: 0.5; }
 }
 
-/* Loading State */
+
 .loading-conversation {
   text-align: center;
   padding: 4rem 2rem;
@@ -457,12 +457,7 @@
   animation: spin 1s linear infinite;
 }
 
-/* Update ConversationPractice.jsx to link to this page */
 
-
-
-
-/* Hint Section */
 .hint-section {
   margin-top: 1rem;
   text-align: center;
@@ -494,7 +489,7 @@
   color: var(--sl-text-muted);
 }
 
-/* Expected Response Hint */
+
 .expected-response-hint {
   margin-top: 1.5rem;
 }
@@ -541,12 +536,12 @@
   font-style: italic;
 }
 
-/* Message filtering to prevent duplicates */
+
 .message-bubble.ai + .message-bubble.ai {
   margin-top: 0.5rem;
 }
 
-/* Feedback message styling */
+
 .message-bubble.feedback {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
@@ -574,7 +569,6 @@
 
 
 
-/* User Turn Section */
 .user-turn-section {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -596,7 +590,7 @@
   font-style: italic;
 }
 
-/* Hint Button */
+
 .btn-hint {
   background: var(--sl-surface-2);
   color: var(--sl-text-strong);
@@ -620,7 +614,7 @@
   color: var(--sl-accent-main);
 }
 
-/* Speak Button */
+
 .btn-speak {
   width: 100%;
   padding: 1rem;
@@ -667,7 +661,7 @@
   50% { transform: scale(1.2); opacity: 0.7; }
 }
 
-/* AI Turn Section */
+
 .ai-turn-section {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -687,7 +681,7 @@
   margin: 0;
 }
 
-/* Conversation Ended */
+
 .conversation-ended {
   text-align: center;
   padding: 1.5rem;
@@ -711,7 +705,7 @@
   width: 100%;
 }
 
-/* Message Keywords */
+
 .message-keywords {
   margin-top: 0.5rem;
   padding: 0.75rem;
@@ -742,7 +736,7 @@
   font-weight: 500;
 }
 
-/* Feedback Messages */
+
 .message-bubble.feedback.success {
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
@@ -765,7 +759,7 @@
 
 
 
-/* User turn indicators */
+
 .expected-keywords {
   margin: 0.75rem 0;
 }
@@ -801,7 +795,7 @@
   margin-top: 0.5rem;
 }
 
-/* AI speaking animation */
+
 .speaking-indicator {
   margin-top: 1rem;
 }
@@ -958,7 +952,6 @@
 }
 
 
-/* Difficulty Selector */
 .difficulty-selector {
     display: flex;
     justify-content: center;
@@ -1006,7 +999,7 @@
     color: var(--sl-text-muted);
 }
 
-/* Header Controls */
+
 .header-controls {
     display: flex;
     align-items: center;
@@ -1024,7 +1017,7 @@
 .difficulty-badge.medium { background: #fbbf24; color: #3a2a0a; }
 .difficulty-badge.hard { background: #f97316; color: white; }
 
-/* Evaluation and Hint Bubbles */
+
 .message-bubble.evaluation-bubble .message-content {
     background: linear-gradient(135deg, #4ade8020, #22c55e20);
     border-left: 3px solid #4ade80;
@@ -1046,7 +1039,7 @@
     border-left: 3px solid #ef4444;
 }
 
-/* Typing Indicator */
+
 .typing-indicator {
     display: flex;
     gap: 4px;
@@ -1069,13 +1062,13 @@
     40% { transform: scale(1); }
 }
 
-/* Loading State */
+
 .message-bubble.loading .message-content {
     background: var(--sl-surface-2);
     padding: 0.8rem 1.2rem;
 }
 
-/* Conversation Ended */
+
 .conversation-ended {
     text-align: center;
     padding: 2rem;
@@ -1150,7 +1143,7 @@
     50% { transform: scale(1.05); opacity: 0.8; }
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .difficulty-selector {
         flex-direction: column;

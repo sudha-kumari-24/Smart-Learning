@@ -23,6 +23,7 @@ const studySessionSchema = new Schema({
 }, { timestamps: true });
 
 // Indexes for faster queries
+
 studySessionSchema.index({ user: 1, date: -1 });
 studySessionSchema.index({ user: 1, sessionType: 1 });
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-// Import all exercise videos
 import breathingVideo from '../assets/exercise_videos/breathing.mp4';
 import bodyScanVideo from '../assets/exercise_videos/body_scan.mp4';
 import focusResetVideo from '../assets/exercise_videos/focus_reset.mp4';
@@ -34,7 +33,6 @@ const SimpleReferenceVideoDetector = ({
   const [isPoseReady, setIsPoseReady] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // Initialize MediaPipe Pose (only if showLandmarks is true)
   useEffect(() => {
     if (!showLandmarks) return;
 
@@ -81,7 +79,7 @@ const SimpleReferenceVideoDetector = ({
     };
   }, [showLandmarks]);
 
-  // Handle pose results
+ 
   const onPoseResults = (results) => {
     if (!canvasRef.current || !videoRef.current) return;
     
@@ -131,7 +129,7 @@ const SimpleReferenceVideoDetector = ({
     }
   };
 
-  // Video detection loop
+  
   useEffect(() => {
     if (!showLandmarks || !isPoseReady || !videoRef.current) return;
     

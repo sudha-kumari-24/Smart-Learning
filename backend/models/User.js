@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema({
       },
       message: 'User must be at least 5 years old'
     }
+    
   },
 
   address: { type: String },
@@ -61,7 +62,7 @@ const userSchema = new mongoose.Schema({
 
   googleId: { type: String },
 
-  // Existing fields untouched
+  // untouched
 
   preferences: {
     studyGoalMinutesPerDay: { type: Number, default: 60 },

@@ -1,7 +1,7 @@
 const Course = require('../models/Course');
 const CourseProgress = require('../models/CourseProgress');
 
-// ✅ GET ALL COURSES
+// ALL COURSES
 exports.listCourses = async (req, res) => {
   const courses = await Course.find();
   res.json(courses);

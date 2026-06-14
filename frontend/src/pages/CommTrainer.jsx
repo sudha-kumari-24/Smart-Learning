@@ -22,17 +22,17 @@ function CommTrainer() {
   });
 
   useEffect(() => {
-    // Check permissions on load
+   
     checkPermissions();
   }, []);
 
   const checkPermissions = async () => {
     try {
-      // Check camera permission
+      
       const cameraPermission = await navigator.permissions.query({ name: 'camera' });
       setPermissionStatus(prev => ({ ...prev, camera: cameraPermission.state }));
       
-      // Check microphone permission
+      
       const micPermission = await navigator.permissions.query({ name: 'microphone' });
       setPermissionStatus(prev => ({ ...prev, microphone: micPermission.state }));
     } catch (error) {
@@ -136,7 +136,7 @@ function CommTrainer() {
           {!user && <p className="login-hint">Login required</p>}
         </div>
 
-        {/* Live Conversation Box */}
+       
         <div className="card comm-card">
           <div className="comm-card-image">
             <img 
@@ -157,7 +157,7 @@ function CommTrainer() {
           {!user && <p className="login-hint">Login required</p>}
         </div>
 
-        {/* Writing Practice Box */}
+       
         <div className="card comm-card">
           <div className="comm-card-image">
             <img 

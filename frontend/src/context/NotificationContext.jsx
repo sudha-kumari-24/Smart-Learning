@@ -8,7 +8,7 @@ export function NotificationProvider({ children }) {
   function show(message, type = 'error') {
     setNotification({ message, type });
 
-    // auto hide after 4 sec
+   
     setTimeout(() => setNotification(null), 4000);
   }
 

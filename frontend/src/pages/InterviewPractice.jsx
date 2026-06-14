@@ -35,9 +35,9 @@ function InterviewPractice() {
   const [aiLoading, setAiLoading] = useState(false);
   const [interviewReport, setInterviewReport] = useState(null);
 
-  const openrouterApiKey = 'YOUR_OPENROUTER_API_KEY'; // Use your .env variable
+  const openrouterApiKey = 'YOUR_OPENROUTER_API_KEY'; 
 
-  // Predefined questions as fallback
+  
   const fallbackQuestions = {
     software: [
       "Tell me about yourself and your software development experience.",
@@ -55,7 +55,7 @@ function InterviewPractice() {
     ]
   };
 
-  // Get AI-generated question
+ 
   const getAIQuestion = async (previousAnswer = null) => {
     setAiLoading(true);
     
@@ -67,12 +67,12 @@ function InterviewPractice() {
         }
       ];
       
-      // Add conversation history
+    
       conversationHistory.forEach(msg => {
         messages.push(msg);
       });
       
-      // If this is a follow-up, include previous answer
+     
       if (previousAnswer) {
         messages.push({
           role: 'user',
@@ -80,7 +80,7 @@ function InterviewPractice() {
         });
       }
       
-      // For first question, ask to start
+      
       if (conversationHistory.length === 0) {
         messages.push({
           role: 'user',
@@ -111,17 +111,17 @@ function InterviewPractice() {
       console.error('AI error, using fallback:', error);
     }
     
-    // Fallback to predefined questions
+    
     const questions = fallbackQuestions[interviewType] || fallbackQuestions.general;
     const index = (conversationHistory.length / 2) % questions.length;
     return questions[index];
   };
 
-  // Speak text using Web Speech API
+
   const speakText = (text) => {
     return new Promise((resolve) => {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stop any ongoing speech
+        window.speechSynthesis.cancel(); 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 0.9;
         utterance.pitch = 1;
@@ -144,62 +144,61 @@ function InterviewPractice() {
     });
   };
 
-  // Ask current question
+
   const askQuestion = async (questionText) => {
     setCurrentQuestion(questionText);
     setWaitingForAnswer(false);
     
-    // Speak the question
+    
     await speakText(questionText);
     
-    // Wait a moment then indicate user can answer
     setTimeout(() => {
       setWaitingForAnswer(true);
       show('🎤 Your turn to speak. Click "Finished Speaking" when done.', 'info');
     }, 500);
   };
 
-  // Load next question
+
   const loadNextQuestion = async (userAnswer = null) => {
-    // Save to conversation history if answer provided
+   
     if (userAnswer) {
       setConversationHistory(prev => [...prev, 
         { role: 'user', content: userAnswer }
       ]);
     }
     
-    // Get next question from AI
+    
     const nextQuestion = await getAIQuestion(userAnswer);
     
-    // Save AI question to history
+   
     setConversationHistory(prev => [...prev, 
       { role: 'assistant', content: nextQuestion }
     ]);
     
     setCurrentQuestionNum(prev => prev + 1);
     
-    // Ask the question
+    
     await askQuestion(nextQuestion);
   };
 
-  // Handle user finished speaking
+ 
   const handleFinishedSpeaking = async () => {
     if (!waitingForAnswer) return;
     
     setWaitingForAnswer(false);
     
-    // Check if time is almost up
+    
     if (recordingTime >= (interviewDuration * 60) - 10) {
       await speakText("Time's up! Thank you for your participation.");
       stopRecordingAndGenerateReport();
       return;
     }
     
-    // Move to next question
+   
     await loadNextQuestion("[User's spoken answer]");
   };
 
-  // Start recording
+  
   const startRecording = async () => {
     if (permissionStatus.camera !== 'granted' || permissionStatus.microphone !== 'granted') {
       show('Please grant permissions first', 'error');
@@ -207,13 +206,13 @@ function InterviewPractice() {
     }
     
     try {
-      // Reset states
+      
       setConversationHistory([]);
       setCurrentQuestionNum(1);
       setInterviewReport(null);
       recordedChunksRef.current = [];
       
-      // Start media recorder
+     
       mediaRecorderRef.current = new MediaRecorder(streamRef.current, {
         mimeType: 'video/webm;codecs=vp9,opus'
       });
@@ -233,7 +232,7 @@ function InterviewPractice() {
       setIsRecording(true);
       setInterviewStarted(true);
       
-      // Start timer
+     
       const interval = setInterval(() => {
         setRecordingTime(prev => {
           if (prev >= interviewDuration * 60) {
@@ -249,10 +248,10 @@ function InterviewPractice() {
       
       setTimerInterval(interval);
       
-      // Welcome and first question
+     
       await speakText(`Welcome to your ${interviewType} interview practice. You have ${interviewDuration} minutes.`);
       
-      // Get first question
+      
       const firstQuestion = await getAIQuestion();
       setConversationHistory([{ role: 'assistant', content: firstQuestion }]);
       await askQuestion(firstQuestion);
@@ -263,13 +262,13 @@ function InterviewPractice() {
     }
   };
 
-  // Save recording
+  
   const saveRecording = async (blob) => {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const filename = `${interviewType}_${user?.id || 'user'}_${interviewDuration}min_${timestamp}.webm`;
       
-      // Try to save via API first
+    
       const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('video', blob, filename);
@@ -309,22 +308,22 @@ function InterviewPractice() {
     }
   };
 
-  // Generate interview report with scoring
+  
   const generateReport = () => {
     const totalQuestions = conversationHistory.filter(m => m.role === 'assistant').length;
     const answeredQuestions = conversationHistory.filter(m => m.role === 'user').length;
     
-    // Calculate score based on number of questions answered vs time
+    
     const expectedQuestions = Math.min(10, Math.floor(recordingTime / 60) + 1);
     const completionScore = Math.min(100, Math.floor((answeredQuestions / expectedQuestions) * 100));
     
-    // Engagement score (based on conversation length)
+    
     const engagementScore = Math.min(100, Math.floor((conversationHistory.length / 2 / 8) * 100));
     
-    // Overall score
+    
     const overallScore = Math.floor((completionScore + engagementScore) / 2);
     
-    // Generate feedback
+    
     let feedback = '';
     let level = '';
     
@@ -357,13 +356,13 @@ function InterviewPractice() {
     
     setInterviewReport(report);
     
-    // Save report to localStorage for history
+   
     const reports = JSON.parse(localStorage.getItem('interviewReports') || '[]');
     reports.unshift(report);
     localStorage.setItem('interviewReports', JSON.stringify(reports.slice(0, 10)));
   };
 
-  // Stop recording and generate report
+ 
   const stopRecordingAndGenerateReport = () => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
       mediaRecorderRef.current.stop();
@@ -374,7 +373,7 @@ function InterviewPractice() {
       
       setInterviewStarted(false);
       
-      // Generate report
+    
       generateReport();
       setShowResults(true);
       
@@ -388,7 +387,7 @@ function InterviewPractice() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Request permissions
+  
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -489,7 +488,7 @@ function InterviewPractice() {
           ) : null}
         </div>
 
-        {/* Right Panel - Interview Content */}
+       
         <div className="questions-panel">
           {!showResults ? (
             <>

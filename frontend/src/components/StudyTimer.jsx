@@ -13,14 +13,14 @@ function StudyTimer({ onPause, isMuted = false }) {
     const intervalRef = useRef(null);
     const tickAudioRef = useRef(null);
 
-    // ---------- LOAD TICK SOUND ----------
+  
     useEffect(() => {
         tickAudioRef.current = new Audio(tickSound);
         tickAudioRef.current.loop = true;
         tickAudioRef.current.volume = 0.5;
     }, []);
 
-    // ---------- Handle mute/unmute ----------
+   
     useEffect(() => {
         if (tickAudioRef.current) {
             if (!isMuted && isRunning) {
@@ -31,7 +31,7 @@ function StudyTimer({ onPause, isMuted = false }) {
         }
     }, [isMuted, isRunning]);
 
-    // ---------- START TIMER ----------
+   
     const startTimer = () => {
         if (isRunning) return;
 
@@ -46,7 +46,7 @@ function StudyTimer({ onPause, isMuted = false }) {
         }, 1000);
     };
 
-    // ---------- PAUSE TIMER ----------
+    
     const pauseTimer = async () => {
         if (!isRunning) return;
 
@@ -77,7 +77,7 @@ function StudyTimer({ onPause, isMuted = false }) {
         }
     };
 
-    // ---------- CLEANUP ----------
+   
     useEffect(() => {
         return () => {
             clearInterval(intervalRef.current);
@@ -87,7 +87,7 @@ function StudyTimer({ onPause, isMuted = false }) {
         };
     }, []);
 
-    // ---------- UI ----------
+ 
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;

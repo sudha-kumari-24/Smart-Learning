@@ -1,10 +1,10 @@
-// backend/routes/userRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { protect } = require('../middleware/authMiddleware');
 
-// Update user profile
+
 router.put('/profile', protect, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -19,7 +19,7 @@ router.put('/profile', protect, async (req, res) => {
       preferences
     } = req.body;
 
-    // Check if email is already taken by another user
+
     if (email) {
       const existingUser = await User.findOne({ email, _id: { $ne: userId } });
       if (existingUser) {
@@ -27,7 +27,7 @@ router.put('/profile', protect, async (req, res) => {
       }
     }
 
-    // Build update object
+
     const updateData = {
       fullName,
       email,
@@ -38,12 +38,12 @@ router.put('/profile', protect, async (req, res) => {
       preferences
     };
 
-    // Only add dateOfBirth if provided
+
     if (dateOfBirth) {
       updateData.dateOfBirth = new Date(dateOfBirth);
     }
 
-    // Update user
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
@@ -61,18 +61,19 @@ router.put('/profile', protect, async (req, res) => {
     });
   } catch (error) {
     console.error('Profile update error:', error);
-    
-    // Handle validation errors
+
+
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(e => e.message);
       return res.status(400).json({ message: messages.join(', ') });
     }
-    
+
     res.status(500).json({ message: 'Server error', error: error.message });
   }
+
 });
 
-// Get user profile
+
 router.get('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash');

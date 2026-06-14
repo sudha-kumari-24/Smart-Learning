@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Courses.css';
 
-// Import images
+
 import dsaImg from '../assets/courses_img/dsa.jpg';
 import datascienceImg from '../assets/courses_img/datascience.jpg';
 import communicationImg from '../assets/courses_img/communication.jpg';
@@ -24,9 +24,9 @@ function Courses() {
   const [flippedCard, setFlippedCard] = useState(null);
   const navigate = useNavigate();
 
-  // Direct image mapping with imported variables
+ 
   const courseImages = {
-    // Exact titles from your database
+    
     'Data Structures Essentials': dsaImg,
     'Data Structures Essentials with Python': dsaImg,
     'Data Structures & Algorithms': dsaImg,
@@ -78,14 +78,14 @@ function Courses() {
     'default': defaultImg
   };
 
-  // Helper function to get image
+ 
   const getCourseImage = (courseTitle) => {
-    // Try exact match first
+    
     if (courseImages[courseTitle]) {
       return courseImages[courseTitle];
     }
 
-    // Try partial match
+    
     const titleLower = courseTitle.toLowerCase();
     for (const [key, img] of Object.entries(courseImages)) {
       if (titleLower.includes(key.toLowerCase())) {
@@ -93,33 +93,33 @@ function Courses() {
       }
     }
 
-    // Fallback to default
+   
     return courseImages['default'];
   };
 
-  
- useEffect(() => {
-  async function loadCourses() {
-    try {
-      const res = await fetch('http://localhost:5000/api/courses');
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch courses");
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const res = await fetch('http://localhost:5000/api/courses');
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+
+        const data = await res.json();
+        console.log("COURSES FROM DB:", data);
+
+        setCourses(data);
+      } catch (err) {
+        console.error('Failed to load courses', err);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await res.json();
-      console.log("COURSES FROM DB:", data);
-
-      setCourses(data);
-    } catch (err) {
-      console.error('Failed to load courses', err);
-    } finally {
-      setLoading(false);
     }
-  }
 
-  loadCourses();
-}, []);
+    loadCourses();
+  }, []);
 
   const handleCardClick = (courseId) => {
     setFlippedCard(flippedCard === courseId ? null : courseId);
@@ -285,7 +285,7 @@ function Courses() {
           </div>
         </div>
 
-        {/* Sidebar with AI Recommendations */}
+       
         <aside className="courses-sidebar">
           <div className="sidebar-card ai-recommendations">
             <h3>🤖 AI Recommendations</h3>

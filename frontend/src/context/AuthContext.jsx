@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('sl_auth');
   }
 
-  // Add this function inside your AuthProvider component (before the value object)
+ 
 const updateUser = (updatedUserData) => {
   setUser(prevUser => ({
     ...prevUser,
@@ -59,7 +59,7 @@ const updateUser = (updatedUserData) => {
     name: updatedUserData.fullName || updatedUserData.name || prevUser?.name
   }));
   
-  // Update localStorage
+ 
   const saved = localStorage.getItem('sl_auth');
   if (saved) {
     const parsed = JSON.parse(saved);
@@ -72,7 +72,7 @@ const updateUser = (updatedUserData) => {
   }
 };
 
-// Then update the value object:
+
 const value = { user, token, saveAuth, logout, updateUser };
 
 

@@ -14,13 +14,13 @@ function Dashboard() {
   const [dailyData, setDailyData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Colors for pie charts
+ 
   const COLORS = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0'];
 
   useEffect(() => {
     if (!user?.id) return;
 
-    // Fetch all dashboard data in one API call
+   
     fetch(`http://localhost:5000/api/analytics/dashboard?userId=${user.id}`)
       .then(res => res.json())
       .then(data => {
@@ -30,7 +30,7 @@ function Dashboard() {
       })
       .catch(err => console.error('Dashboard fetch error:', err));
 
-    // Fetch daily data for charts
+   
     fetch(`http://localhost:5000/api/analytics/daily?userId=${user.id}&days=7`)
       .then(res => res.json())
       .then(data => {
@@ -51,21 +51,21 @@ function Dashboard() {
     minutes: item.minutesStudied || 0,
   }));
 
-  // Prepare data for study by type pie chart
+  
   const studyByTypeData = dashboardData?.studyByType ? [
     { name: 'Timer', value: dashboardData.studyByType.timer || 0 },
     { name: 'Posture', value: dashboardData.studyByType.posture || 0 },
     { name: 'Stress Relief', value: dashboardData.studyByType.stress_relief || 0 }
   ] : [];
 
-  // Daily goal from dashboard data or default
+ 
   const dailyGoal = dashboardData?.dailyGoal || 120;
   const todayMinutes = dashboardData?.todayMinutes || 0;
   const percentComplete = dashboardData?.percentComplete || 0;
 
   return (
     <div style={{ padding: '20px' }}>
-      {/* Today's Progress Bar */}
+    
       <h3>Today's Progress</h3>
       <div style={{ background: '#eee', height: 12, borderRadius: 6 }}>
         <div
@@ -80,16 +80,16 @@ function Dashboard() {
       </div>
       <p>{todayMinutes} / {dailyGoal} minutes</p>
 
-      {/* Stats Cards Row */}
+   
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', margin: '30px 0' }}>
-        {/* Streak Card */}
+        
         <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', padding: '20px', borderRadius: '12px', color: 'white', textAlign: 'center' }}>
           <div style={{ fontSize: '36px' }}>🔥</div>
           <div style={{ fontSize: '28px', fontWeight: 'bold' }}>{dashboardData?.streak || 0}</div>
           <div>Day Streak</div>
         </div>
 
-        {/* Total Hours Card */}
+       
         <div style={{ background: 'linear-gradient(135deg, #f093fb, #f5576c)', padding: '20px', borderRadius: '12px', color: 'white', textAlign: 'center' }}>
           <div style={{ fontSize: '36px' }}>⭐</div>
           <div style={{ fontSize: '28px', fontWeight: 'bold' }}>
@@ -98,7 +98,7 @@ function Dashboard() {
           <div>Total Study Time</div>
         </div>
 
-        {/* Courses Completed Card */}
+        
         <div style={{ background: 'linear-gradient(135deg, #4facfe, #00f2fe)', padding: '20px', borderRadius: '12px', color: 'white', textAlign: 'center' }}>
           <div style={{ fontSize: '36px' }}>🎓</div>
           <div style={{ fontSize: '28px', fontWeight: 'bold' }}>{dashboardData?.completedCourses || 0}</div>
@@ -106,7 +106,7 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Study by Activity Type - Pie Chart */}
+      
       {studyByTypeData.length > 0 && studyByTypeData.some(d => d.value > 0) && (
         <>
           <hr style={{ margin: '30px 0' }} />
@@ -134,7 +134,7 @@ function Dashboard() {
         </>
       )}
 
-      {/* Daily Study Trend - Line Chart */}
+    
       {chartData.length > 0 && (
         <>
           <hr style={{ margin: '30px 0' }} />
@@ -160,7 +160,7 @@ function Dashboard() {
         </>
       )}
 
-      {/* Weekly Study Distribution - Bar Chart */}
+     
       {chartData.length > 0 && (
         <>
           <hr style={{ margin: '30px 0' }} />
@@ -179,7 +179,7 @@ function Dashboard() {
         </>
       )}
 
-      {/* Goal Completion - Pie Chart */}
+     
       <hr style={{ margin: '30px 0' }} />
       <h3>Goal Completion</h3>
       <div style={{ width: '100%', height: 260 }}>

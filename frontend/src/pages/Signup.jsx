@@ -1,4 +1,4 @@
-// src/pages/Signup.jsx
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
@@ -86,7 +86,7 @@ function Signup() {
 
   return (
     <section className="page auth-page auth-split">
-      {/* Left same visual as login */}
+     
       <div className="auth-visual">
         <div className="auth-image-layer" />
         <div className="auth-visual-content">
@@ -106,7 +106,7 @@ function Signup() {
      
 
 
-      {/* Right side: signup form */}
+      
       <div className="auth-panel">
         
         <header className="auth-header">
@@ -203,15 +203,7 @@ function Signup() {
                 Address
                 <div className="input-with-icon">
                   <span className="input-icon">📍</span>
-                  {/* <textarea
-                    name="address"
-                    rows="2"
-                    value={form.address}
-                    onChange={handleChange}
-                    placeholder="City, state, country"
-                    required
-                  /> */}
-
+                  
                   <input name="address"
                     type='text'
                     value={form.address}

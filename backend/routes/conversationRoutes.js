@@ -3,12 +3,13 @@ const router = express.Router();
 const ConversationSession = require('../models/ConversationSession');
 const { protect } = require('../middleware/authMiddleware');
 
-// Save conversation session
+
+
 router.post('/save', protect, async (req, res) => {
   try {
     const { scenario, duration, responses } = req.body;
     
-    // Calculate overall score
+    
     const calculateScore = (responsesData) => {
       if (!responsesData || responsesData.length === 0) return 50;
       
@@ -49,7 +50,7 @@ router.post('/save', protect, async (req, res) => {
   }
 });
 
-// Get user's conversation history
+
 router.get('/history', protect, async (req, res) => {
   try {
     const sessions = await ConversationSession.find({ userId: req.user.id })
@@ -64,7 +65,7 @@ router.get('/history', protect, async (req, res) => {
   }
 });
 
-// Get specific session
+
 router.get('/:id', protect, async (req, res) => {
   try {
     const session = await ConversationSession.findById(req.params.id);

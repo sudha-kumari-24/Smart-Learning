@@ -8,14 +8,14 @@ const { protect } = require('../middleware/authMiddleware');
 
 console.log('protect middleware type:', typeof protect);
 
-// ========== MULTER CONFIGURATION ==========
-// Configure storage for interview videos
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Save to backend/uploads/interviews
+   
     const uploadDir = path.join(__dirname, '../uploads/interviews');
 
-    // Create directory if it doesn't exist
+    
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
       console.log('Created directory:', uploadDir);
@@ -35,9 +35,7 @@ const upload = multer({
   limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit
 });
 
-// ========== ROUTES ==========
 
-// Test route
 router.get('/test', protect, (req, res) => {
   res.json({
     message: 'Interview routes working!',
@@ -45,7 +43,7 @@ router.get('/test', protect, (req, res) => {
   });
 });
 
-// Get all interview sessions for a user
+
 router.get('/my-sessions', protect, async (req, res) => {
   try {
     const sessions = await InterviewSession.find({ userId: req.user.id })
@@ -59,7 +57,7 @@ router.get('/my-sessions', protect, async (req, res) => {
   }
 });
 
-// Get interview session by ID
+
 router.get('/:id', protect, async (req, res) => {
   try {
     const session = await InterviewSession.findById(req.params.id);
@@ -80,7 +78,7 @@ router.get('/:id', protect, async (req, res) => {
   }
 });
 
-// ========== VIDEO UPLOAD ENDPOINT ==========
+
 router.post('/upload-video', protect, upload.single('video'), async (req, res) => {
   try {
     console.log('📹 Uploading video...');
@@ -91,7 +89,7 @@ router.post('/upload-video', protect, upload.single('video'), async (req, res) =
       return res.status(400).json({ error: 'No video file uploaded' });
     }
     
-    // Save to database
+    
     const session = new InterviewSession({
       userId: req.body.userId,
       interviewType: req.body.interviewType,
@@ -117,11 +115,12 @@ router.post('/upload-video', protect, upload.single('video'), async (req, res) =
     console.error('❌ Error uploading video:', error);
     res.status(500).json({ error: 'Server error uploading video' });
   }
+
 });
 
 
 
-// Save video metadata (legacy endpoint - for backward compatibility)
+
 router.post('/save-video', protect, async (req, res) => {
   try {
     const { interviewType, duration, userId } = req.body;
@@ -155,7 +154,7 @@ router.post('/save-video', protect, async (req, res) => {
   }
 });
 
-// Save interview session with keywords
+
 router.post('/save', protect, async (req, res) => {
   try {
     const { interviewType, duration, videoFilename, keywordsMatched } = req.body;
@@ -203,7 +202,7 @@ router.post('/save', protect, async (req, res) => {
   }
 });
 
-// Get pending interviews for recruiter
+
 router.get('/recruiter/pending', protect, async (req, res) => {
   try {
     const sessions = await InterviewSession.find({
@@ -220,7 +219,7 @@ router.get('/recruiter/pending', protect, async (req, res) => {
   }
 });
 
-// Mark interview as reviewed
+
 router.put('/:id/review', protect, async (req, res) => {
   try {
     const session = await InterviewSession.findById(req.params.id);

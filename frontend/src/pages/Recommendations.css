@@ -1,4 +1,4 @@
-/* Recommendations.css - with theme support */
+
 .recommendation-module {
   all: initial;
 }
@@ -132,7 +132,7 @@
   cursor: not-allowed;
 }
 
-/* Results Page */
+
 .recommendation-module .results-header {
   display: flex;
   justify-content: space-between;
@@ -307,7 +307,7 @@
   transform: scale(1.02);
 }
 
-/* Chat Window */
+
 .recommendation-module .ai-chat-assistant {
   position: fixed;
   bottom: 2rem;
@@ -416,7 +416,6 @@
   cursor: pointer;
 }
 
-/* Loading */
 .recommendation-module .recommendations-loading {
   display: flex;
   flex-direction: column;
@@ -450,7 +449,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .recommendation-module .recommendations-container,
   .recommendation-module .recommendations-results {
@@ -478,8 +476,7 @@
 }
 
 
-/* Chat bubble styles for user messages */
-/* User message bubble - with border to match AI style */
+
 .recommendation-module .chat-bubble.user {
   background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
   color: white;

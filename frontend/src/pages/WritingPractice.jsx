@@ -16,10 +16,10 @@ function WritingPractice() {
   
   const textareaRef = useRef(null);
 
-  // Demo text
+ 
   const demoText = `Hi their! Im writeing to inform you that the meeting have been moved to tomorrow. We should discusses about the new project and it's deadlines. Please bringing your notes.`;
 
-  // Update highlighted ranges when analysis has errors
+ 
   useEffect(() => {
     if (analysis && analysis.errors && analysis.errors.length > 0 && userText) {
       const ranges = [];
@@ -43,12 +43,12 @@ function WritingPractice() {
     }
   }, [analysis, userText]);
 
-  // Escape regex special characters
+ 
   const escapeRegex = (string) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
-  // Analyze text with backend API
+  
   const analyzeText = async () => {
     if (!userText.trim()) {
       show('Please enter some text to analyze', 'error');
@@ -57,7 +57,7 @@ function WritingPractice() {
     
     setIsAnalyzing(true);
     
-    // Check if this is demo text
+   
     const isDemo = userText === demoText;
     
     try {
@@ -88,7 +88,7 @@ function WritingPractice() {
     }
   };
 
-  // Replace entire text with improved version
+ 
   const replaceWithImproved = () => {
     if (analysis && analysis.improved_text) {
       setUserText(analysis.improved_text);
@@ -98,7 +98,7 @@ function WritingPractice() {
     }
   };
 
-  // Load demo text
+ 
   const loadDemo = () => {
     setUserText(demoText);
     setAnalysis(null);
@@ -106,14 +106,14 @@ function WritingPractice() {
     show('Demo text loaded. Click "Analyze Text" to see analysis.', 'info');
   };
 
-  // Clear text
+ 
   const clearText = () => {
     setUserText('');
     setAnalysis(null);
     setHighlightedRanges([]);
   };
 
-  // Render text with highlights
+ 
   const renderHighlightedPreview = () => {
     if (!userText || highlightedRanges.length === 0) return null;
     
@@ -123,7 +123,7 @@ function WritingPractice() {
     const sortedRanges = [...highlightedRanges].sort((a, b) => a.start - b.start);
     
     sortedRanges.forEach((range, idx) => {
-      // Add text before highlight
+      
       if (range.start > lastIndex) {
         elements.push(
           <span key={`text-${idx}`}>
@@ -132,7 +132,7 @@ function WritingPractice() {
         );
       }
       
-      // Add highlighted word
+     
       elements.push(
         <span 
           key={`highlight-${idx}`}
@@ -146,7 +146,7 @@ function WritingPractice() {
       lastIndex = range.end;
     });
     
-    // Add remaining text
+    
     if (lastIndex < userText.length) {
       elements.push(
         <span key="text-end">
@@ -158,7 +158,7 @@ function WritingPractice() {
     return <div className="highlighted-preview">{elements}</div>;
   };
 
-  // Get score color
+  
   const getScoreColor = (score) => {
     if (score >= 80) return '#4ade80';
     if (score >= 60) return '#fbbf24';
@@ -183,7 +183,7 @@ function WritingPractice() {
       </header>
 
       <div className="writing-container">
-        {/* Left Panel - Writing Area */}
+      
         <div className="writing-panel">
           <div className="text-area-container">
             <div className="text-area-header">
@@ -213,7 +213,7 @@ function WritingPractice() {
               rows={12}
             />
             
-            {/* Highlighted Preview */}
+            
             {analysis && analysis.errors && analysis.errors.length > 0 && (
               <div className="highlighted-container">
                 <h4>Preview with Highlights:</h4>
@@ -247,7 +247,7 @@ function WritingPractice() {
           </div>
         </div>
 
-        {/* Right Panel - Analysis Results */}
+      
         <div className="analysis-panel">
           <h3>Analysis Results</h3>
           
@@ -258,7 +258,7 @@ function WritingPractice() {
             </div>
           ) : analysis ? (
             <div className="results-container">
-              {/* Overall Score */}
+       
               <div className="score-card">
                 <div className="score-circle" style={{ borderColor: getScoreColor(analysis.score) }}>
                   <span className="score-value" style={{ color: getScoreColor(analysis.score) }}>
@@ -285,7 +285,7 @@ function WritingPractice() {
                 </div>
               </div>
 
-              {/* Errors List */}
+            
               {analysis.errors && analysis.errors.length > 0 && (
                 <div className="errors-section">
                   <h4>Found {analysis.errors.length} Issue{analysis.errors.length !== 1 ? 's' : ''}</h4>
@@ -312,7 +312,7 @@ function WritingPractice() {
                 </div>
               )}
 
-              {/* Improved Text Preview */}
+             
               {analysis.improved_text && analysis.improved_text !== userText && (
                 <div className="improved-section">
                   <h4>✨ Improved Version</h4>
@@ -322,7 +322,7 @@ function WritingPractice() {
                 </div>
               )}
 
-              {/* Suggestions */}
+              
               {analysis.suggestions && analysis.suggestions.length > 0 && (
                 <div className="suggestions-section">
                   <h4>💡 Tips for Improvement</h4>

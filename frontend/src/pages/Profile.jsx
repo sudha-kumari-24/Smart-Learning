@@ -22,7 +22,7 @@ function Profile() {
     );
   }
 
-  // Fetch today's progress from new dashboard endpoint
+  
   useEffect(() => {
     fetch(`http://localhost:5000/api/analytics/dashboard?userId=${user.id}`)
       .then(res => res.json())
@@ -52,7 +52,7 @@ function Profile() {
       .catch(err => console.error('Error updating progress:', err));
   }
 
-  // Calculate study level
+ 
   const getStudyLevel = () => {
     if (todayMinutes >= 120) return { level: "🔥 Intense Focus", color: "#f97316", icon: "🔥" };
     if (todayMinutes >= 60) return { level: "⚡ Productive", color: "#4ade80", icon: "⚡" };
@@ -65,7 +65,7 @@ function Profile() {
 
   return (
     <section className="profile-page-enhanced">
-      {/* Hero Section */}
+     
       <div className="profile-hero">
         <div className="profile-hero-content">
           <div className="profile-avatar-large">
@@ -88,7 +88,7 @@ function Profile() {
         </div>
       </div>
 
-      {/* Stats Grid */}
+      
       <div className="profile-stats-grid">
         <div className="stat-card">
           <div className="stat-icon">📖</div>
@@ -125,7 +125,7 @@ function Profile() {
         </div>
       </div>
 
-      {/* Study Timer Section */}
+      
       <div className="profile-section timer-section">
         <div className="section-header">
           <h3>🎯 Focus Session</h3>
@@ -151,9 +151,9 @@ function Profile() {
         </div>
       </div>
 
-      {/* Main Info Grid */}
+     
       <div className="profile-info-grid">
-        {/* Personal Information */}
+      
         <div className="info-card">
           <div className="card-header">
             <span className="card-icon">👤</span>
@@ -179,7 +179,7 @@ function Profile() {
           </div>
         </div>
 
-        {/* Academic Information */}
+       
         <div className="info-card">
           <div className="card-header">
             <span className="card-icon">🎓</span>
@@ -201,7 +201,7 @@ function Profile() {
           </div>
         </div>
 
-        {/* Wellness Preferences */}
+       
         <div className="info-card">
           <div className="card-header">
             <span className="card-icon">🧘</span>
@@ -223,7 +223,7 @@ function Profile() {
           </div>
         </div>
 
-        {/* Learning Path */}
+       
         <div className="info-card learning-path">
           <div className="card-header">
             <span className="card-icon">🚀</span>
@@ -241,7 +241,7 @@ function Profile() {
         </div>
       </div>
 
-      {/* Quick Actions */}
+      
       <div className="profile-quick-actions">
         <button className="quick-action-btn" onClick={() => navigate('/courses')}>
           <span>📚</span> Browse Courses

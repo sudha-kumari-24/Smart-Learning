@@ -30,7 +30,7 @@ function CourseDetail() {
         console.log("USER ID:", userId);
         console.log("COURSE ID:", id);
 
-        // ✅ FETCH COURSE
+      
         const res = await fetch(`http://localhost:5000/api/courses/${id}`);
 
         if (!res.ok) {
@@ -43,7 +43,7 @@ function CourseDetail() {
         console.log("COURSE:", data);
         setCourse(data);
 
-        // ✅ FETCH ENROLLMENT
+       
         if (userId) {
           const res2 = await fetch('http://localhost:5000/api/courses/check-enrollment', {
             method: 'POST',
@@ -61,7 +61,7 @@ function CourseDetail() {
       } catch (err) {
         console.error("LOAD ERROR:", err);
 
-        // ❗ IMPORTANT: STOP LOADING EVEN ON ERROR
+       
         setCourse({ videos: [] });
       }
     }
@@ -93,7 +93,7 @@ function CourseDetail() {
 
   const handleEnroll = () => {
     setIsEnrolled(true);
-    // Add your enroll logic here
+    
   };
 
 
@@ -132,7 +132,7 @@ const handleCertificate = async () => {
     console.log("2. User ID:", userId);
     console.log("3. Course ID:", id);
 
-    // Fetch certificate data from backend
+    
     console.log("4. Fetching certificate data from backend...");
     const res = await fetch('http://localhost:5000/api/certificate/data', {
       method: 'POST',
@@ -152,14 +152,14 @@ const handleCertificate = async () => {
     const data = await res.json();
     console.log("7. Certificate data received:", data);
 
-    // Check if we have all required data
+    
     if (!data.userName || !data.courseName || !data.certificateId) {
       console.error("8. Missing data:", data);
       alert("Incomplete certificate data");
       return;
     }
 
-    // Generate PDF using react-pdf
+    
     console.log("9. Generating PDF...");
     const pdfBlob = await pdf(
       <CertificatePDF 
@@ -173,7 +173,7 @@ const handleCertificate = async () => {
 
     console.log("10. PDF generated, size:", pdfBlob.size);
 
-    // Download the PDF
+    
     const url = URL.createObjectURL(pdfBlob);
     const a = document.createElement('a');
     a.href = url;
@@ -196,7 +196,7 @@ const handleCertificate = async () => {
   return (
     <div className="course-detail">
       <div className="course-layout">
-        {/* Main Video Area */}
+       
         <div className="video-primary">
           <div className="video-player-wrapper">
             <iframe
@@ -225,7 +225,7 @@ const handleCertificate = async () => {
 
               const data = await res.json();
 
-              setProgress(data.progressPercent); // ✅ update UI
+              setProgress(data.progressPercent); 
             }}
           >
             ✅ Mark as Watched
@@ -245,14 +245,14 @@ const handleCertificate = async () => {
             </div>
           </div>
 
-          {/* Course Description (collapsible) */}
+          
           <details className="course-description">
             <summary>About this course</summary>
             <p>{course.description || "No description available."}</p>
           </details>
         </div>
 
-        {/* Playlist Sidebar */}
+       
         <div className="playlist-sidebar">
           <div className="playlist-header">
             <h3>Course Content</h3>
@@ -286,7 +286,7 @@ const handleCertificate = async () => {
             ))}
           </div>
 
-          {/* Navigation Buttons (mobile friendly) */}
+          
           <div className="playlist-nav-mobile">
             <button
               className="nav-btn prev"
@@ -306,7 +306,7 @@ const handleCertificate = async () => {
         </div>
       </div>
 
-      {/* Certificate Section */}
+     
       {isEnrolled && progress === 100 && (
         <div className="certificate-section">
           <button className="cert-btn" onClick={handleCertificate}>

@@ -6,10 +6,10 @@
   padding: 0;
 }
 
-/* DARK THEME = deep blue background */
+
 :root[data-theme="dark"] {
   --sl-bg: radial-gradient(circle at top, #020617 0%, #020617 35%, #0b1120 100%);
-  --sl-surface-1: rgba(15, 23, 42, 0.96);      /* cards, navbar */
+  --sl-surface-1: rgba(15, 23, 42, 0.96);     
   --sl-surface-2: rgba(15, 23, 42, 0.9);
   --sl-surface-3: #020617;
   --sl-border-subtle: rgba(148, 163, 184, 0.45);
@@ -17,30 +17,30 @@
   --sl-text-strong: #e5e7eb;
   --sl-text-muted: #9ca3af;
 
-  --sl-accent-main: #6366f1;   /* indigo */
-  --sl-accent-soft: #22d3ee;   /* cyan */
-  --sl-accent-alt: #f97316;    /* orange for highlights */
+  --sl-accent-main: #6366f1;  
+  --sl-accent-soft: #22d3ee;  
+  --sl-accent-alt: #f97316;  
 
   --sl-chip-hover: rgba(30, 64, 175, 0.7);
 }
 
-/* LIGHT THEME = soft white / pastel */
+
 :root[data-theme="light"] {
-  /* overall page background → pure white */
+  
   --sl-bg: #ffffff;
 
-  /* cards and surfaces → soft grey/white */
+ 
   --sl-surface-1: #ffffff;
   --sl-surface-2: #f9fafb;
   --sl-surface-3: #e5e7eb;
 
-  /* borders & text */
+  
   --sl-border-subtle: rgba(209, 213, 219, 0.9);
   --sl-border-strong: rgba(148, 163, 184, 0.9);
   --sl-text-strong: #0f172a;  /* dark text */
   --sl-text-muted: #6b7280;   /* grey text */
 
-  /* accents */
+
   --sl-accent-main: #4f46e5;
   --sl-accent-soft: #38bdf8;
   --sl-accent-alt: #f97316;

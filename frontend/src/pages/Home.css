@@ -1,4 +1,4 @@
-/* Home Module - Compact & Responsive */
+
 .home-module {
   min-height: 100vh;
   background: var(--sl-bg);
@@ -6,7 +6,7 @@
   padding: 0 1rem;
 }
 
-/* Hero Section */
+
 .home-hero-enhanced {
   min-height: auto;
   display: flex;
@@ -86,7 +86,7 @@
   border: 2px solid var(--sl-border-subtle);
 }
 
-/* Stats */
+
 .home-stats-enhanced {
   display: flex;
   gap: 1.5rem;
@@ -110,7 +110,7 @@
   background: var(--sl-border-subtle);
 }
 
-/* ===== IMAGE COLLAGE (1 center + 4 boundary + floating tags) ===== */
+
 .home-hero-visual-enhanced {
   flex: 1;
   position: relative;
@@ -127,7 +127,7 @@
   margin: 0 auto;
 }
 
-/* Center Image */
+
 .collage-main {
   position: absolute;
   top: 50%;
@@ -160,7 +160,7 @@
   pointer-events: none;
 }
 
-/* Boundary Images - Circular arrangement */
+
 .collage-item {
   position: absolute;
   width: 85px;
@@ -200,7 +200,7 @@
   font-weight: 500;
 }
 
-/* Boundary Image Positions */
+
 .item-top {
   top: 0;
   left: 50%;
@@ -229,7 +229,7 @@
   animation: floatLeft 5.5s ease-in-out infinite;
 }
 
-/* Floating Tags - Around the circle */
+
 .floating-tag {
   position: absolute;
   padding: 0.35rem 0.9rem;
@@ -247,7 +247,7 @@
   pointer-events: none;
 }
 
-/* Desktop Tag Positions - Around the circle boundary */
+
 .tag-top-left {
   top: -5%;
   left: 15%;
@@ -302,13 +302,13 @@
   animation-delay: 2.4s;
 }
 
-/* Tag Animations */
+
 @keyframes floatTag {
   0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.7; }
   50% { transform: translateY(-5px) translateX(3px); opacity: 1; }
 }
 
-/* Boundary Image Animations */
+
 @keyframes floatTop {
   0%, 100% { transform: translateX(-50%) translateY(0px); }
   50% { transform: translateX(-50%) translateY(-12px); }
@@ -329,7 +329,7 @@
   50% { transform: translateY(-50%) translateX(-8px); }
 }
 
-/* Features Section */
+
 .home-features-compact {
   padding: 3rem 0 2rem;
 }
@@ -386,7 +386,7 @@
   color: var(--sl-text-muted);
 }
 
-/* Testimonials */
+
 .home-testimonials-compact {
   padding: 2rem 0;
 }
@@ -430,7 +430,7 @@
   color: var(--sl-text-strong);
 }
 
-/* CTA Section */
+
 .home-cta-compact {
   padding: 2.5rem 1.5rem;
   background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
@@ -462,7 +462,7 @@
   transition: all 0.3s ease;
 }
 
-/* ===== MOBILE RESPONSIVE ===== */
+
 @media (max-width: 768px) {
   .home-module {
     padding: 0 0.8rem;
@@ -488,7 +488,7 @@
     margin-bottom: 1rem;
   }
   
-  /* Mobile Image Collage - Compact */
+
   .home-hero-visual-enhanced {
     min-height: auto;
     max-height: 50vh;
@@ -517,12 +517,12 @@
     padding: 0.15rem;
   }
   
-  /* Hide floating tags on mobile */
+
   .floating-tag {
     display: none;
   }
   
-  /* Features & Testimonials */
+ 
   .features-grid-compact {
     gap: 0.8rem;
   }
@@ -540,7 +540,7 @@
   }
 }
 
-/* Small Mobile */
+
 @media (max-width: 480px) {
   .image-collage {
     width: 240px;
@@ -593,7 +593,7 @@
   }
 }
 
-/* Extra Small Mobile */
+
 @media (max-width: 380px) {
   .image-collage {
     width: 200px;
@@ -611,7 +611,7 @@
   }
 }
 
-/* Tablet adjustments */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .image-collage {
     width: 420px;
@@ -646,7 +646,6 @@
   }
 }
 
-/* Dark mode */
 [data-theme="dark"] .floating-tag {
   background: rgba(15, 23, 42, 0.9);
 }
@@ -655,7 +654,7 @@
   background: rgba(255, 255, 255, 0.95);
 }
 
-/* Animation for fade in */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

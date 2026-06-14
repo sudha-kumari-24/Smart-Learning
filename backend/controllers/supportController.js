@@ -9,7 +9,7 @@ exports.createCallRequest = async (req, res, next) => {
   try {
     const { topic, note } = req.body;
 
-    // basic validation
+   
     if (!topic || !note) {
       return res.status(400).json({
         success: false,
@@ -17,12 +17,12 @@ exports.createCallRequest = async (req, res, next) => {
       });
     }
 
-    // req.user comes from authMiddleware (protect)
+   
     const callRequest = await CallRequest.create({
       user: req.user._id,
       topic,
       note,
-      status: 'pending', // optional but good practice
+      status: 'pending', 
     });
 
     res.status(201).json({
@@ -40,6 +40,7 @@ exports.createCallRequest = async (req, res, next) => {
  * @route   GET /api/support/call-requests
  * @access  Private (Admin later)
  */
+
 exports.getAllCallRequests = async (req, res, next) => {
   try {
     const requests = await CallRequest.find()
@@ -56,11 +57,14 @@ exports.getAllCallRequests = async (req, res, next) => {
   }
 };
 
+
 /**
  * @desc    Update call request status
  * @route   PATCH /api/support/call-request/:id
  * @access  Private (Admin later)
  */
+
+
 exports.updateCallRequestStatus = async (req, res, next) => {
   try {
     const { status } = req.body;

@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const path = require('path');  // Add this import
+const path = require('path'); 
 const interviewRoutes = require('./routes/interviewRoutes');
 
 const conversationRoutes = require('./routes/conversationRoutes');
@@ -24,12 +24,12 @@ app.use(cors({
 
 app.use(express.json());
 
-// health check
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'SmartLearning backend running' });
 });
 
-// ROUTES — ONLY AFTER app EXISTS
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));
 app.use('/api/certificate', require('./routes/certificateRoutes'));
@@ -41,12 +41,10 @@ app.use('/api/users', userRoutes);
 
 app.use('/api/interview', interviewRoutes);
 
-// Serve uploaded videos from backend/uploads/interviews
+
 app.use('/uploads/interviews', express.static(path.join(__dirname, 'uploads/interviews')));
 
 
-
-// Serve frontend build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/dist')));
   app.get('*', (req, res) => {
@@ -54,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// error handler
+
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({

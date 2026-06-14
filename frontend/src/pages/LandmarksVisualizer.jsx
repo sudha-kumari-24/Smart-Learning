@@ -1,36 +1,35 @@
-// LandmarksVisualizer.jsx
 import React from 'react';
 
-// Landmark connections configuration - these connect landmarks to form the human body
+
 const LANDMARK_CONNECTIONS = [
   // Face oval
-  [10, 338], [338, 297], [297, 332], [332, 284], [284, 251], [251, 389], [389, 356], 
-  [356, 454], [454, 323], [323, 361], [361, 288], [288, 397], [397, 365], [365, 379], 
-  [379, 378], [378, 400], [400, 377], [377, 152], [152, 148], [148, 176], [176, 149], 
-  [149, 150], [150, 136], [136, 172], [172, 58], [58, 132], [132, 93], [93, 234], 
+  [10, 338], [338, 297], [297, 332], [332, 284], [284, 251], [251, 389], [389, 356],
+  [356, 454], [454, 323], [323, 361], [361, 288], [288, 397], [397, 365], [365, 379],
+  [379, 378], [378, 400], [400, 377], [377, 152], [152, 148], [148, 176], [176, 149],
+  [149, 150], [150, 136], [136, 172], [172, 58], [58, 132], [132, 93], [93, 234],
   [234, 127], [127, 162], [162, 21], [21, 54], [54, 103], [103, 67], [67, 109], [109, 10],
-  
+
   // Left eyebrow
   [336, 296], [296, 334], [334, 293], [293, 300], [300, 276], [276, 283], [283, 282], [282, 295],
-  
+
   // Right eyebrow
   [70, 63], [63, 105], [105, 66], [66, 107], [107, 55], [55, 65], [65, 52], [52, 53],
-  
+
   // Left eye
-  [362, 382], [382, 381], [381, 380], [380, 374], [374, 373], [373, 390], [390, 249], 
-  [249, 263], [263, 466], [466, 388], [388, 387], [387, 386], [386, 385], [385, 384], 
+  [362, 382], [382, 381], [381, 380], [380, 374], [374, 373], [373, 390], [390, 249],
+  [249, 263], [263, 466], [466, 388], [388, 387], [387, 386], [386, 385], [385, 384],
   [384, 398], [398, 362],
-  
+
   // Right eye
-  [33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155], 
-  [155, 133], [133, 173], [173, 157], [157, 158], [158, 159], [159, 160], [160, 161], 
+  [33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155],
+  [155, 133], [133, 173], [173, 157], [157, 158], [158, 159], [159, 160], [160, 161],
   [161, 246], [246, 33],
-  
+
   // Lips
-  [61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405], [405, 321], 
-  [321, 375], [375, 291], [291, 409], [409, 270], [270, 269], [269, 267], [267, 0], 
+  [61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405], [405, 321],
+  [321, 375], [375, 291], [291, 409], [409, 270], [270, 269], [269, 267], [267, 0],
   [0, 37], [37, 39], [39, 40], [40, 185], [185, 61],
-  
+
   // Pose connections (torso, arms, legs)
   // Shoulders to hips
   [11, 23], [12, 24],
@@ -57,39 +56,39 @@ const LandmarksVisualizer = ({ landmarks, status, width = 640, height = 480 }) =
     return null;
   }
 
-  // Function to draw landmarks and connections
+  
   const drawLandmarks = (ctx) => {
-    // Clear canvas
+   
     ctx.clearRect(0, 0, width, height);
+
     
-    // Set line color based on status
     const lineColor = status === 'correct' ? '#00ff00' : '#ff0000';
     const pointColor = status === 'correct' ? '#00cc00' : '#cc0000';
+
     
-    // Draw connections first (so points appear on top)
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = 2;
-    
+
     LANDMARK_CONNECTIONS.forEach(connection => {
       const [startIdx, endIdx] = connection;
-      
-      // Check if both landmarks exist in our data
+
+     
       if (landmarks[startIdx] && landmarks[endIdx]) {
         const start = landmarks[startIdx];
         const end = landmarks[endIdx];
-        
+
         ctx.beginPath();
         ctx.moveTo(start.x * width, start.y * height);
         ctx.lineTo(end.x * width, end.y * height);
         ctx.stroke();
       }
     });
+
     
-    // Draw individual landmarks
     ctx.fillStyle = pointColor;
     landmarks.forEach((landmark, index) => {
       if (landmark && landmark.x && landmark.y) {
-        // Draw a circle for each landmark
+       
         ctx.beginPath();
         ctx.arc(
           landmark.x * width,
@@ -99,17 +98,13 @@ const LandmarksVisualizer = ({ landmarks, status, width = 640, height = 480 }) =
           2 * Math.PI
         );
         ctx.fill();
-        
-        // Optional: Draw landmark index numbers (for debugging)
-        // ctx.fillStyle = '#ffffff';
-        // ctx.font = '10px Arial';
-        // ctx.fillText(index.toString(), landmark.x * width + 5, landmark.y * height - 5);
-        // ctx.fillStyle = pointColor;
+
+       
       }
     });
   };
 
-  // Create a canvas and draw on it
+  
   const canvasRef = React.useRef(null);
 
   React.useEffect(() => {

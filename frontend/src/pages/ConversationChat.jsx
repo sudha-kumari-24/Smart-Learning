@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './ConversationChat.css';
 
-// Predefined first messages for each scenario (no API call needed)
+
 const FIRST_MESSAGES = {
     restaurant: "Welcome to our restaurant! What would you like to order today?",
     police: "Police station. How can I help you today?",
@@ -81,7 +81,7 @@ function ConversationChat() {
             const data = await response.json();
             
             if (data.success) {
-                // Show evaluation
+               
                 if (data.evaluation && data.evaluation.score) {
                     addMessage('evaluation', `⭐ Score: ${data.evaluation.score}/10 - ${data.evaluation.feedback}`, 'evaluation-bubble');
                     setTimeout(() => {
@@ -89,21 +89,21 @@ function ConversationChat() {
                     }, 4000);
                 }
                 
-                // Show hint if provided and not hard mode
+               
                 if (data.hint && difficulty !== 'hard') {
                     addMessage('hint', `💡 Hint: ${data.hint}`, 'hint-bubble');
                 }
                 
-                // Check if conversation is complete
+               
                 if (data.is_complete) {
                     setConversationComplete(true);
                     setTurn('ended');
                     speakAI(data.ai_response);
                 } else {
-                    // Speak the AI response
+                    
                     speakAI(data.ai_response);
                     
-                    // Update history
+                   
                     setHistory(prev => [...prev, 
                         { role: 'user', content: userMessage },
                         { role: 'assistant', content: data.ai_response }
@@ -183,7 +183,7 @@ function ConversationChat() {
     const startConversation = (selectedDifficulty) => {
         setDifficulty(selectedDifficulty);
         
-        // Add welcome message based on difficulty
+       
         const welcomeMessages = {
             easy: "🌟 Easy Mode: I'll be very helpful. Speak naturally.",
             medium: "👋 Medium Mode: Let's have a natural conversation.",
@@ -191,10 +191,10 @@ function ConversationChat() {
         };
         addMessage('system', welcomeMessages[selectedDifficulty], 'system-bubble');
         
-        // Get first message (predefined, no API call)
+        
         const firstMessage = FIRST_MESSAGES[scenarioId] || FIRST_MESSAGES.restaurant;
         
-        // Speak the first message immediately
+       
         setTimeout(() => {
             speakAI(firstMessage);
             setHistory([{ role: 'assistant', content: firstMessage }]);
@@ -208,14 +208,14 @@ function ConversationChat() {
         });
     }, [messages]);
 
-    // Cleanup speech on unmount
+   
     useEffect(() => {
         return () => {
             window.speechSynthesis.cancel();
         };
     }, []);
 
-    // Difficulty selection screen
+   
     if (!difficulty) {
         const scenarioTitles = {
             restaurant: '🍽️ Restaurant',

@@ -1,4 +1,4 @@
-/* Writing Practice Styles */
+
 .writing-page {
   padding: 2rem;
   max-width: 1400px;
@@ -19,7 +19,7 @@
   }
 }
 
-/* Writing Panel */
+
 .writing-panel {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -149,7 +149,7 @@
   margin-top: 0.5rem;
 }
 
-/* Analysis Panel */
+
 .analysis-panel {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -214,7 +214,7 @@
   line-height: 1.5;
 }
 
-/* Results Container */
+
 .results-container {
   display: flex;
   flex-direction: column;
@@ -264,7 +264,7 @@
   margin: 0;
 }
 
-/* Errors Section */
+/
 .errors-section h4 {
   color: var(--sl-text-strong);
   margin-bottom: 1rem;
@@ -317,7 +317,7 @@
   color: var(--success-color);
 }
 
-/* Keywords Section */
+
 .keywords-section {
   background: var(--sl-surface-2);
   border-radius: 10px;
@@ -372,7 +372,7 @@
   background: #ef4444;
 }
 
-/* Suggestions Section */
+
 .suggestions-section {
   background: var(--sl-surface-2);
   border-radius: 10px;
@@ -525,7 +525,7 @@
   background: #00a187;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .writing-page {
     padding: 1rem;
@@ -537,8 +537,6 @@
 }
 
 
-
-/* Additional styles for the improved writing feature */
 
 .action-buttons {
   display: flex;
@@ -637,7 +635,6 @@
   color: var(--sl-text-muted);
 }
 
-/* Error highlight colors */
 .error-highlight.red {
   background-color: rgba(239, 68, 68, 0.3);
   border-bottom: 2px solid #ef4444;

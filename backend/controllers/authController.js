@@ -1,4 +1,4 @@
-// controllers/authController.js
+
 
 console.log('🔥 NEW AUTH CONTROLLER LOADED');
 
@@ -11,7 +11,7 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 function createToken(user) {
   return jwt.sign(
-    { id: user._id, name: user.fullName, email: user.email },  // ✅ Uses 'id'
+    { id: user._id, name: user.fullName, email: user.email },  
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
   );
@@ -131,9 +131,7 @@ exports.googleAuth = async (req, res, next) => {
   }
 };
 
-// ========== ADD THESE NEW FUNCTIONS ==========
 
-// Get user profile (protected)
 exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash');
@@ -147,7 +145,7 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Update user profile (protected)
+
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -162,7 +160,7 @@ exports.updateUserProfile = async (req, res) => {
       preferences
     } = req.body;
 
-    // Check if email is already taken by another user
+   
     if (email) {
       const existingUser = await User.findOne({ 
         email, 
@@ -173,7 +171,7 @@ exports.updateUserProfile = async (req, res) => {
       }
     }
 
-    // Build update object
+   
     const updateData = {
       fullName,
       email,
@@ -184,17 +182,17 @@ exports.updateUserProfile = async (req, res) => {
       preferences
     };
 
-    // Only add dateOfBirth if provided and valid
+    
     if (dateOfBirth && dateOfBirth !== '') {
       updateData.dateOfBirth = new Date(dateOfBirth);
     }
 
-    // Remove undefined fields
+    
     Object.keys(updateData).forEach(key => 
       updateData[key] === undefined && delete updateData[key]
     );
 
-    // Update user
+    
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
@@ -213,7 +211,7 @@ exports.updateUserProfile = async (req, res) => {
   } catch (error) {
     console.error('Profile update error:', error);
     
-    // Handle validation errors
+   
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(e => e.message);
       return res.status(400).json({ message: messages.join(', ') });
@@ -230,7 +228,7 @@ exports.updateUserProfile = async (req, res) => {
 
 
 
-// Get user profile (protected)
+
 exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash');
@@ -244,7 +242,7 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Update user profile (protected)
+
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -259,7 +257,7 @@ exports.updateUserProfile = async (req, res) => {
       preferences
     } = req.body;
 
-    // Check if email is already taken by another user
+    
     if (email) {
       const existingUser = await User.findOne({ 
         email, 
@@ -270,7 +268,7 @@ exports.updateUserProfile = async (req, res) => {
       }
     }
 
-    // Build update object
+   
     const updateData = {
       fullName,
       email,
@@ -281,17 +279,17 @@ exports.updateUserProfile = async (req, res) => {
       preferences
     };
 
-    // Only add dateOfBirth if provided and valid
+   
     if (dateOfBirth && dateOfBirth !== '') {
       updateData.dateOfBirth = new Date(dateOfBirth);
     }
 
-    // Remove undefined fields
+   
     Object.keys(updateData).forEach(key => 
       updateData[key] === undefined && delete updateData[key]
     );
 
-    // Update user
+   
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },

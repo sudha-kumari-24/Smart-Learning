@@ -73,7 +73,7 @@ const courseSchema = new Schema({
   videos: [
     {
       title: String,
-      embedUrl: String, // YouTube embed link
+      embedUrl: String,
       durationSec: Number
     }
   ],

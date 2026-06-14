@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import './ConversationPractice.css';
 
-// Import your images
 
 import restaurantImg from '../assets/live_conv/restaurant.jpg';
 import ambulanceImg from '../assets/live_conv/ambulance.jpg';
@@ -233,7 +232,7 @@ function ConversationPractice() {
                   </div>
                 </div>
 
-                {/* Back of Card - FULL DETAILS */}
+               
                 <div className="card-back">
                   <div className="scenario-header-back">
                     <h3>{scenario.title}</h3>
@@ -320,7 +319,7 @@ function ConversationPractice() {
           ))}
         </div>
 
-        {/* Sidebar - remains the same */}
+      
         <div className="conversation-sidebar">
           <div className="sidebar-card">
             <h3>🎯 How It Works</h3>

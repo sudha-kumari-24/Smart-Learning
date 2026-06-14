@@ -1,4 +1,3 @@
-// just to check if it is asking for opening the camera or not.
 
 import React, { useEffect, useRef, useState } from 'react';
 

@@ -10,16 +10,16 @@ const Recommendations = () => {
   const [recommendations, setRecommendations] = useState(null);
   const [loading, setLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState([]);  // ✅ Store full chat history
+  const [chatHistory, setChatHistory] = useState([]); 
   const [showChat, setShowChat] = useState(false);
 
-  const chatMessagesEndRef = useRef(null); // ✅ Auto-scroll reference
+  const chatMessagesEndRef = useRef(null); 
 
   useEffect(() => {
     fetchQuestions();
   }, []);
 
-  // ✅ Auto-scroll to bottom when chat history updates
+ 
   useEffect(() => {
     if (chatMessagesEndRef.current) {
       chatMessagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -85,15 +85,15 @@ const Recommendations = () => {
     navigate(`/courses/${courseId}`);
   };
 
-  // ✅ Updated sendChatMessage - stores history and clears input properly
+  
   const sendChatMessage = async () => {
     if (!chatMessage.trim()) return;
 
     const userMessage = chatMessage.trim();
 
-    // Add user message to chat history
+   
     setChatHistory(prev => [...prev, { role: 'user', content: userMessage }]);
-    setChatMessage(''); // Clear input immediately
+    setChatMessage('');
     setLoading(true);
 
     try {
@@ -108,7 +108,7 @@ const Recommendations = () => {
 
       const data = await response.json();
 
-      // Add AI response to chat history
+    
       setChatHistory(prev => [...prev, { role: 'assistant', content: data.response }]);
 
     } catch (error) {
@@ -119,7 +119,7 @@ const Recommendations = () => {
     }
   };
 
-  // ✅ Handle Enter key press
+ 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -131,15 +131,14 @@ const Recommendations = () => {
     setCurrentStep(0);
     setResponses([]);
     setRecommendations(null);
-    setChatHistory([]); // ✅ Clear chat history on restart
+    setChatHistory([]); 
     setChatMessage('');
   };
 
-  // ✅ Clear chat history when closing chat window
+ 
   const handleCloseChat = () => {
     setShowChat(false);
-    // Optional: Clear chat history when closing? 
-    // setChatHistory([]); // Uncomment if you want to clear on close
+  
   };
 
   if (questions.length === 0) {
@@ -153,7 +152,7 @@ const Recommendations = () => {
     );
   }
 
-  // Question answering interface
+ 
   if (currentStep < questions.length && !recommendations) {
     const currentQuestion = questions[currentStep];
     const currentAnswer = responses.find(r => r.question_id === currentQuestion.id)?.answer;
@@ -213,7 +212,7 @@ const Recommendations = () => {
             </div>
           </div>
 
-          {/* AI Chat Assistant */}
+        
           <div className="ai-chat-assistant">
             <button
               className="chat-toggle-btn"
@@ -269,7 +268,7 @@ const Recommendations = () => {
     );
   }
 
-  // Recommendations results
+ 
   if (recommendations && recommendations.recommendations) {
     return (
       <div className="recommendation-module">
@@ -331,7 +330,7 @@ const Recommendations = () => {
             ))}
           </div>
 
-          {/* Persistent AI Chat */}
+         
           <div className="floating-chat">
             <button
               className="floating-chat-btn"

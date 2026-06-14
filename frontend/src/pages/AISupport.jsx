@@ -17,7 +17,7 @@ const AISupport = () => {
   const chatMessagesRef = useRef(null);
   const recognitionRef = useRef(null);
 
-  // Quick commands for suggestions
+
   const quickCommands = [
     { icon: '📚', text: 'How to study effectively?', command: 'How to study effectively?' },
     { icon: '💪', text: 'I need motivation', command: 'I need motivation' },
@@ -35,7 +35,7 @@ const AISupport = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Initialize WebSocket connection
+  
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:8001/socket.io/?EIO=4&transport=websocket');
     socketRef.current = socket;
@@ -48,10 +48,10 @@ const AISupport = () => {
       setIsConnected(true);
       setStatus('Connected');
 
-      // Send initial ping to establish Socket.IO protocol
+      
       socket.send('40');
 
-      // Process queued messages
+     
       isConnected = true;
       messageQueue.forEach(msg => socket.send(msg));
       messageQueue = [];
@@ -73,7 +73,7 @@ const AISupport = () => {
 
             if (eventName === 'assistant_response') {
               const now = Date.now();
-              // Ignore duplicate responses within 1 second
+              
               if (eventData.content === lastResponseContent && (now - lastResponseTime) < 1000) {
                 console.log('Duplicate response ignored');
                 return;
@@ -123,7 +123,7 @@ const AISupport = () => {
     };
   }, []);
 
-  // Initialize speech recognition
+  
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -149,7 +149,7 @@ const AISupport = () => {
 
         const transcript = result[0].transcript.trim();
 
-        // Avoid duplicates completely
+      
         if (transcript === lastSentText) return;
 
         lastSentText = transcript;
@@ -186,7 +186,7 @@ const AISupport = () => {
     setInput('');
     setIsTyping(true);
 
-    // Send via WebSocket
+    
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       const command = {
         command: text,
@@ -198,7 +198,7 @@ const AISupport = () => {
       setIsTyping(false);
     }
 
-    // Reset sending flag after delay
+   
     setTimeout(() => setIsSending(false), 1000);
   };
 
@@ -233,7 +233,7 @@ const AISupport = () => {
 
   return (
     <section className="ai-support-page">
-      {/* Sidebar */}
+     
       <aside className="ai-sidebar">
         <div className="ai-sidebar-header">
           <div className="ai-logo">
@@ -269,9 +269,9 @@ const AISupport = () => {
         </div>
       </aside>
 
-      {/* Main Chat Area */}
+     
       <main className="ai-chat-area">
-        {/* Header */}
+       
         <header className="ai-chat-header">
           <button className="ai-sidebar-toggle" id="aiSidebarToggle">
             ☰
@@ -290,7 +290,7 @@ const AISupport = () => {
           </div>
         </header>
 
-        {/* Chat Messages */}
+       
         <div className="ai-chat-container" ref={chatMessagesRef}>
           {showWelcome && messages.length === 0 ? (
             <div className="ai-welcome-message">
@@ -350,7 +350,7 @@ const AISupport = () => {
           )}
         </div>
 
-        {/* Input Area */}
+        
         <div className="ai-input-area">
           <div className="ai-input-container">
             <div className="ai-input-wrapper">

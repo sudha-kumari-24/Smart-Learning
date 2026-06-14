@@ -29,7 +29,7 @@ def generate_recommendations():
     user_responses = data.get('responses', [])
     user_id = data.get('userId')
     
-    # Fetch user data from main backend if userId provided
+   
     user_data = None
     if user_id:
         try:
@@ -39,7 +39,7 @@ def generate_recommendations():
         except Exception as e:
             print(f"Error fetching user data: {e}")
     
-    # Get recommendations
+  
     recommendations = recommendation_service.get_course_recommendations(user_responses, user_data)
     
     return jsonify({
@@ -76,7 +76,7 @@ def get_all_courses():
     except Exception as e:
         print(f"Error fetching courses: {e}")
     
-    # Fallback
+    
     return jsonify({
         "success": True,
         "courses": recommendation_service.get_fallback_courses()
@@ -88,9 +88,6 @@ def save_user_responses():
     data = request.json
     user_id = data.get('userId')
     responses = data.get('responses', [])
-    
-    # Store in a file or database (for now, just return success)
-    # You can integrate this with your main database
     
     return jsonify({
         "success": True,

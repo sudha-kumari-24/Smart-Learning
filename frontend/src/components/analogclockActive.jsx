@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import AnalogClock from './AnalogClock';
 
-// it works always but restart of hours is not shown.
 
 function App() {
     const [isPaused, setIsPaused] = useState(false);

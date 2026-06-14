@@ -7,14 +7,6 @@ import { useAuth } from '../context/AuthContext';
 
 
 
-// for running first check the backend then frontend then backend again otherwise it will show fatch error.
-// to see proper connections only works in backend.
-
-// http://localhost:5000/api/health
-
-
-
-
 
 
 function Login() {
@@ -22,7 +14,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const [loading, setLoading] = useState(false); // Safe addition
+    const [loading, setLoading] = useState(false); 
 
     const { saveAuth } = useAuth();
     const navigate = useNavigate();
@@ -86,7 +78,7 @@ function Login() {
             navigate('/');
         } catch (err) {
             console.error(err);
-            // optionally show error on screen
+           
         }
     }
 
@@ -96,10 +88,10 @@ function Login() {
 
     return (
         <section className="page auth-page auth-split">
-            {/* Left image panel */}
+           
 
             <div className="auth-visual">
-                {/* <img src="../assets/signin scholars.png" alt="Hello Student" /> */}
+            
                 <div className="auth-image-layer" />
                 <div className="auth-visual-content">
                     <span className="auth-pill">
@@ -115,7 +107,7 @@ function Login() {
                 </div>
             </div>
 
-            {/* Right form panel */}
+           
             <div className="auth-panel">
                 <header className="auth-header">
                     <h2>Sign in</h2>
@@ -127,7 +119,7 @@ function Login() {
 
                     {error && <p className="error-text">{error}</p>}
 
-                    {/* Google button */}
+                   
                     <GoogleLogin
                         onSuccess={handleGoogleSuccess}
                         onError={handleGoogleError}

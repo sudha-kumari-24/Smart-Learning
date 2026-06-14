@@ -11,7 +11,7 @@ class AISupportService:
         self.openrouter_api_key = os.getenv('OPENROUTER_API_KEY')
         print(f"🔑 API Key loaded: {'Yes' if self.openrouter_api_key else 'No'}")
         
-        # Predefined responses for common queries
+        
         self.predefined_responses = {
             "hello": "Hello! I'm your AI Study Assistant. How can I help with your studies today?",
             "hi": "Hi there! Ready to study? What subject are you working on?",
@@ -33,22 +33,25 @@ class AISupportService:
         
         command_lower = command.lower().strip()
         
-        # Check predefined responses
+        
         for keyword, response in self.predefined_responses.items():
             if keyword in command_lower:
                 return response
         
-        # Check for resource opening
+        
         for resource_name, url in self.study_resources.items():
             if f"open {resource_name}" in command_lower:
                 return f"Opening {resource_name.title()} for you!"
         
-        # Try OpenRouter API
+      
         if self.openrouter_api_key:
             return self.get_openrouter_response(command)
         
         return "I'm here to help! Could you tell me more about what you're studying?"
     
+
+
+
     def get_openrouter_response(self, command):
         """Get response from OpenRouter using auto-router"""
         
@@ -93,6 +96,9 @@ class AISupportService:
         except Exception as e:
             print(f"⚠️ Exception: {e}")
             return self.get_helpful_response(command)
+    
+
+
     
     def get_helpful_response(self, command):
         """Fallback response"""

@@ -1,11 +1,11 @@
-/* Profile Page - Enhanced Design */
+
 .profile-page-enhanced {
   min-height: 100vh;
   background: var(--sl-bg);
   padding: 1rem;
 }
 
-/* Loading State */
+
 .profile-loading {
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Hero Section */
+
 .profile-hero {
   background: linear-gradient(135deg, var(--sl-accent-main)20, var(--sl-accent-alt)20);
   border-radius: 24px;
@@ -129,7 +129,7 @@
   transform: translateY(-2px);
 }
 
-/* Stats Grid */
+
 .profile-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -187,7 +187,7 @@
   transition: width 0.3s ease;
 }
 
-/* Section */
+
 .profile-section {
   background: var(--sl-surface-1);
   border-radius: 20px;
@@ -216,7 +216,7 @@
   justify-content: center;
 }
 
-/* Info Grid */
+
 .profile-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -286,7 +286,7 @@
   word-break: break-word;
 }
 
-/* Learning Path Card */
+
 .learning-path {
   background: linear-gradient(135deg, var(--sl-accent-main)10, var(--sl-accent-alt)10);
 }
@@ -334,7 +334,7 @@
   box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
 }
 
-/* Quick Actions */
+
 .profile-quick-actions {
   display: flex;
   flex-wrap: wrap;
@@ -363,7 +363,7 @@
   border-color: var(--sl-accent-main);
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .profile-page-enhanced {
     padding: 0.5rem;
@@ -427,7 +427,7 @@
   }
 }
 
-/* Dark mode specific */
+
 [data-theme="dark"] .stat-card,
 [data-theme="dark"] .info-card,
 [data-theme="dark"] .profile-section {

@@ -7,7 +7,7 @@ load_dotenv()
 api_key = os.getenv('OPENROUTER_API_KEY')
 print(f"API Key loaded: {'Yes' if api_key else 'No'}")
 
-# Use models from your get_models.py output
+
 models_to_try = [
     "qwen/qwen3-next-80b-a3b-instruct:free",
     "google/gemma-4-26b-a4b-it:free",

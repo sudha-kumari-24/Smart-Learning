@@ -10,7 +10,7 @@ function PostureAssistant() {
   const location = useLocation();
   const exerciseType = location.state?.exerciseType || 'study_default';
 
-  // State declarations
+ 
   const [detectionOn, setDetectionOn] = useState(false);
   const [comment, setComment] = useState('');
   const [status, setStatus] = useState('idle');
@@ -22,7 +22,7 @@ function PostureAssistant() {
   const [referenceLandmarks, setReferenceLandmarks] = useState([]);
   const [showReferenceLandmarks, setShowReferenceLandmarks] = useState(false);
 
-  // Refs
+
   const videoRef = useRef(null);
   const landmarksCanvasRef = useRef(null);
   const wsRef = useRef(null);
@@ -30,13 +30,13 @@ function PostureAssistant() {
   const lastDrawTimeRef = useRef(0);
   const lastStatusRef = useRef('idle');
 
-  // Timer logic
+
   const { seconds, isRunning, start, pause, reset } = useStudyTimer();
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
 
-  // Function to save timer progress to backend (ADD THIS FUNCTION)
+
   const saveTimerProgress = useCallback(async () => {
     if (!seconds || seconds <= 0) return;
     
@@ -45,9 +45,9 @@ function PostureAssistant() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: "demo_user", // Replace with actual user ID from auth
+          userId: "demo_user", 
           seconds: seconds,
-          sessionType: 'posture'  // ✅ Add this line
+          sessionType: 'posture' 
         })
       });
       const data = await response.json();
@@ -57,14 +57,14 @@ function PostureAssistant() {
     }
   }, [seconds]);
 
-  // Save timer when paused (modify pause button logic)
+  
   const handlePauseTimer = () => {
     pause();
     setTimerManuallyStarted(false);
-    saveTimerProgress(); // ✅ Save when paused
+    saveTimerProgress(); 
   };
 
-  // Text-to-speech function
+ 
   const speak = useCallback((text) => {
     const now = Date.now();
     if (now - lastSpokenTime < 15000) return;
@@ -82,7 +82,7 @@ function PostureAssistant() {
     setLastSpokenTime(now);
   }, [lastSpokenTime]);
 
-  // Timer auto-pause/resume based on person detection
+ 
   useEffect(() => {
     const hasPerson = landmarks && landmarks.length > 10 && 
       landmarks[11] && landmarks[11].x !== undefined &&
@@ -99,7 +99,7 @@ function PostureAssistant() {
     }
   }, [landmarks, isRunning, timerManuallyStarted, start, pause]);
 
-  // Drawing function for landmarks
+ 
   const drawLandmarksOnCanvas = useCallback((landmarksArray, currentStatus) => {
     if (!landmarksCanvasRef.current || !landmarksArray || landmarksArray.length === 0) {
       return;
@@ -167,7 +167,7 @@ function PostureAssistant() {
     ctx.restore();
   }, []);
 
-  // Effect for handling landmarks visibility
+  
   useEffect(() => {
     if (!landmarksCanvasRef.current) return;
     const canvas = landmarksCanvasRef.current;
@@ -186,7 +186,7 @@ function PostureAssistant() {
     }
   }, [showLandmarks]);
 
-  // Webcam setup effect
+  
   useEffect(() => {
     if (!detectionOn) {
       if (videoRef.current && videoRef.current.srcObject) {
@@ -222,7 +222,7 @@ function PostureAssistant() {
     };
   }, [detectionOn]);
 
-  // WebSocket connection effect
+
   useEffect(() => {
     if (!detectionOn) return;
 
@@ -310,7 +310,7 @@ function PostureAssistant() {
     };
   }, [detectionOn, exerciseType, speak, drawLandmarksOnCanvas, showLandmarks]);
 
-  // Frame capture and sending effect
+  
   useEffect(() => {
     if (!detectionOn || !wsRef.current) return;
 
@@ -415,7 +415,7 @@ function PostureAssistant() {
           />
         </div>
 
-        {/* Live Detection */}
+       
         <div className="live-detection">
           <h3>
             Live Detection
@@ -445,7 +445,7 @@ function PostureAssistant() {
             )}
           </div>
 
-          {/* Feedback Section */}
+          
           <div className="feedback">
             <div style={{
               padding: '15px',

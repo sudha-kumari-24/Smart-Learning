@@ -1,4 +1,3 @@
-/* Human Help Page - Enhanced Design */
 .human-page {
   min-height: 100vh;
   background: var(--sl-bg);
@@ -6,7 +5,7 @@
   transition: background 0.3s ease;
 }
 
-/* Header Section */
+
 .human-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -39,7 +38,6 @@
   color: var(--sl-text-muted);
 }
 
-/* Info Grid */
 .human-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -80,7 +78,7 @@
   color: var(--sl-text-muted);
 }
 
-/* Card Wrapper */
+
 .human-card-wrapper {
   max-width: 800px;
   margin: 0 auto 2rem;
@@ -95,7 +93,7 @@
   transition: transform 0.3s ease;
 }
 
-/* Card Header */
+
 .card-header {
   background: linear-gradient(135deg, var(--sl-accent-main), var(--sl-accent-alt));
   padding: 1.5rem;
@@ -149,7 +147,7 @@
   font-size: 1.2rem;
 }
 
-/* Topic Options */
+
 .topic-options {
   display: flex;
   flex-direction: column;
@@ -221,7 +219,7 @@
   border-radius: 50%;
 }
 
-/* Textarea */
+
 .textarea-wrapper {
   position: relative;
 }
@@ -256,7 +254,7 @@
   margin-top: 0.5rem;
 }
 
-/* Submit Button */
+
 .btn-submit {
   width: 100%;
   padding: 1rem;
@@ -315,7 +313,7 @@
   animation: spin 0.6s linear infinite;
 }
 
-/* Login Warning */
+
 .login-warning {
   margin-top: 1rem;
   padding: 0.75rem;
@@ -331,7 +329,7 @@
   gap: 0.5rem;
 }
 
-/* Error Message */
+
 .error-message {
   margin-bottom: 1rem;
   padding: 0.75rem;
@@ -345,7 +343,7 @@
   gap: 0.5rem;
 }
 
-/* Success Container */
+
 .success-container {
   text-align: center;
   padding: 3rem 2rem;
@@ -425,7 +423,7 @@
   transform: translateY(-2px);
 }
 
-/* FAQ Section */
+
 .human-faq {
   max-width: 800px;
   margin: 0 auto;
@@ -469,7 +467,7 @@
   line-height: 1.5;
 }
 
-/* Animations */
+
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -518,7 +516,7 @@
   }
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .human-page {
     padding: 1rem;
@@ -571,10 +569,11 @@
   }
 }
 
-/* Dark mode specific adjustments */
+
 [data-theme="dark"] .topic-card.selected {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(249, 115, 22, 0.2));
 }
+
 
 [data-theme="light"] .topic-card.selected {
   background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(249, 115, 22, 0.1));

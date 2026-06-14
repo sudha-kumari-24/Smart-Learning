@@ -11,7 +11,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 app = Flask(__name__)
 CORS(app)
 
-# Try Groq first (fastest), fallback to OpenRouter
+
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 
@@ -122,22 +122,23 @@ Return JSON:
 def get_writing_analysis(text):
     """Get analysis using fastest available API"""
     
-    # Try Groq first (fastest)
+    
     analysis = call_groq_api(text)
     
-    # Fallback to OpenRouter if Groq fails
+    
     if not analysis:
         analysis = call_openrouter_api(text)
     
-    # Final fallback
+    
     if not analysis:
         return get_fallback_analysis(text)
     
-    # Add colors to errors
+   
     for error in analysis.get("errors", []):
         error["color"] = COLOR_MAPPING.get(error.get("type", "grammar"), "red")
     
     return analysis
+
 
 def get_fallback_analysis(text):
     """Fallback when all APIs fail"""
@@ -211,9 +212,11 @@ def analyze_writing():
         print(f"Error: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
+
 @app.route('/api/writing/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy", "service": "writing-analysis"})
+
 
 if __name__ == '__main__':
     print("✍️ Writing Analysis Service running on port 8003...")

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
 function HumanHelp() {
+
   const { user, token } = useAuth();
   const notify = useNotification();
   const [topic, setTopic] = useState('');
@@ -92,7 +93,7 @@ function HumanHelp() {
           </div>
         </div>
 
-        {/* Main Form Card */}
+       
         <div className="human-card-wrapper">
           <div className="human-card">
             {submitted ? (
@@ -218,7 +219,7 @@ function HumanHelp() {
           </div>
         </div>
 
-        {/* FAQ Section */}
+       
         <div className="human-faq">
           <h3>Frequently Asked Questions</h3>
           <div className="faq-grid">

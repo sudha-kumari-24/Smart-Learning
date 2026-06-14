@@ -19,12 +19,12 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 ai_service = AISupportService()
 
-# Global variables
+
 is_listening = False
 recognizer = sr.Recognizer()
 is_processing = False
 
-# Initialize mixer for TTS
+
 if not mixer.get_init():
     try:
         mixer.init(frequency=22050)
@@ -96,7 +96,7 @@ def handle_text_command(data):
         
         threading.Thread(target=speak_text, args=(result['response'],), daemon=True).start()
     
-    # Reset flag after delay
+  
     threading.Timer(1.0, lambda: set_processing_false()).start()
 
 def set_processing_false():
@@ -135,11 +135,11 @@ def voice_recognition_loop():
                 audio = recognizer.listen(source, timeout=5, phrase_time_limit=8)
                 text = recognizer.recognize_google(audio)
                 
-                # Stop listening after getting input - NO 'global' here, already declared at top
+               
                 is_listening = False
                 socketio.emit('listening_status', {'status': 'inactive', 'message': 'Processing...'})
                 
-                # Process the command
+               
                 result = ai_service.get_websocket_response(text)
                 
                 socketio.emit('assistant_response', {
@@ -151,7 +151,7 @@ def voice_recognition_loop():
                 })
                 
                 threading.Thread(target=speak_text, args=(result['response'],), daemon=True).start()
-                break  # Exit the loop after processing
+                break 
                 
             except sr.WaitTimeoutError:
                 continue

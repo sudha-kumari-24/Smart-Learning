@@ -4,7 +4,7 @@
   gap: 1.8rem;
 }
 
-/* Header */
+
 .page-header h2 {
   margin-bottom: 0.3rem;
   color: var(--text-primary);
@@ -16,21 +16,21 @@
   margin-bottom: 1.5rem;
 }
 
-/* Main Layout */
+
 .courses-layout {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
   gap: 2rem;
 }
 
-/* Courses Grid */
+
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-/* Flip Card Container */
+
 .course-card-container {
   perspective: 1200px;
   height: 380px;
@@ -58,7 +58,7 @@
   transform: rotateY(180deg);
 }
 
-/* Front and Back Cards */
+
 .card-front,
 .card-back {
   position: absolute;
@@ -84,7 +84,7 @@
   justify-content: space-between;
 }
 
-/* Front Card - Enhanced */
+
 .course-image {
   position: relative;
   height: 160px;
@@ -204,7 +204,7 @@
   gap: 0.5rem;
 }
 
-/* Back Card - Enhanced */
+
 .card-back h3 {
   font-size: 1.2rem;
   margin-bottom: 1.2rem;
@@ -283,7 +283,7 @@
   gap: 0.4rem;
 }
 
-/* Card Actions */
+
 .card-actions {
   display: flex;
   flex-direction: column;
@@ -342,7 +342,7 @@
   background: var(--primary-light);
 }
 
-/* Sidebar */
+
 .courses-sidebar {
   display: flex;
   flex-direction: column;
@@ -363,7 +363,7 @@
   border-color: var(--primary-color);
 }
 
-/* AI Recommendations */
+
 .ai-recommendations h3 {
   font-size: 1.1rem;
   margin-bottom: 1rem;
@@ -428,7 +428,7 @@
   border: 1px solid var(--border-light);
 }
 
-/* Certificate Card */
+
 .certificate-card h3 {
   font-size: 1.1rem;
   margin-bottom: 0.8rem;
@@ -460,7 +460,7 @@
   gap: 0.5rem;
 }
 
-/* Job Market Card */
+
 .job-market-card h3 {
   font-size: 1.1rem;
   margin-bottom: 0.8rem;
@@ -517,7 +517,7 @@
   background: var(--primary-light);
 }
 
-/* Loading Animation */
+
 .loading-dots {
   display: flex;
   justify-content: center;
@@ -552,7 +552,7 @@
   }
 }
 
-/* Responsive */
+
 @media (max-width: 1100px) {
   .courses-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

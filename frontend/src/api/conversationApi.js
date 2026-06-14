@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/conversations'; // Adjust port as needed
+const API_URL = 'http://localhost:5000/api/conversations';
 
-// Axios instance with auth token
+
 const api = axios.create({
   baseURL: API_URL,
 });
 
-// Add token to requests
+// Adding token to requests
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -21,7 +21,8 @@ api.interceptors.request.use(
   }
 );
 
-// Save conversation session
+
+// Saving conversation session
 export const saveConversationSession = async (sessionData) => {
   try {
     const response = await api.post('/save', sessionData);
@@ -32,7 +33,8 @@ export const saveConversationSession = async (sessionData) => {
   }
 };
 
-// Get user's conversation history
+
+// Getting user's conversation history
 export const getConversationHistory = async () => {
   try {
     const response = await api.get('/history');
@@ -43,7 +45,7 @@ export const getConversationHistory = async () => {
   }
 };
 
-// Get specific session details
+// Getting specific session details
 export const getSessionDetails = async (sessionId) => {
   try {
     const response = await api.get(`/${sessionId}`);

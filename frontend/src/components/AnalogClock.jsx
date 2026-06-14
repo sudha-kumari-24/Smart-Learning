@@ -5,7 +5,7 @@ function AnalogClock({ seconds }) {
     const min = Math.floor(seconds / 60) % 60;
     const hour = Math.floor(seconds / 3600) % 12;
 
-    // Angles
+
     const secondAngle = sec * 6;
     const minuteAngle = min * 6 + sec * 0.1;
     const hourAngle = hour * 30 + min * 0.5;
@@ -13,13 +13,13 @@ function AnalogClock({ seconds }) {
     return (
         <div style={styles.clockWrapper}>
             <div style={styles.clock}>
-                {/* Clock face with gradient */}
+           
                 <div style={styles.face}></div>
                 
-                {/* Shine overlay */}
+              
                 <div style={styles.shine}></div>
 
-                {/* Minute ticks */}
+              
                 {[...Array(60)].map((_, i) => {
                     const angle = i * 6;
                     const isHourTick = i % 5 === 0;
@@ -38,12 +38,12 @@ function AnalogClock({ seconds }) {
                     );
                 })}
 
-                {/* Numbers - positioned with absolute positioning */}
+               
                 <div style={styles.numberWrapper}>
                     {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((hourNum, index) => {
                         let style = { ...styles.number };
                         
-                        // Position each number manually for perfect alignment
+                       
                         switch(hourNum) {
                             case 12:
                                 style = { ...style, top: '20px', left: '50%', transform: 'translateX(-50%)' };
@@ -96,7 +96,7 @@ function AnalogClock({ seconds }) {
                     })}
                 </div>
 
-                {/* Hour Hand */}
+               
                 <div
                     style={{
                         ...styles.hourHand,
@@ -104,7 +104,7 @@ function AnalogClock({ seconds }) {
                     }}
                 />
 
-                {/* Minute Hand */}
+              
                 <div
                     style={{
                         ...styles.minuteHand,
@@ -112,7 +112,7 @@ function AnalogClock({ seconds }) {
                     }}
                 />
 
-                {/* Second Hand */}
+             
                 <div
                     style={{
                         ...styles.secondHand,
@@ -120,7 +120,7 @@ function AnalogClock({ seconds }) {
                     }}
                 />
 
-                {/* Center Assembly */}
+               
                 <div style={styles.centerAssembly}>
                     <div style={styles.centerRing}></div>
                     <div style={styles.centerDot}></div>

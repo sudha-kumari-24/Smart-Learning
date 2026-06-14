@@ -1,4 +1,4 @@
-/* Conversation Practice Page */
+
 .conversation-page {
   padding: 2rem;
   max-width: 1400px;
@@ -42,7 +42,6 @@
   background: var(--sl-surface-2);
 }
 
-/* Permission Alert */
 .permission-alert {
   background: rgba(245, 158, 11, 0.1);
   border: 1px solid #f59e0b;
@@ -54,7 +53,7 @@
   font-weight: 500;
 }
 
-/* Conversation Layout */
+
 .conversation-layout {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
@@ -67,14 +66,14 @@
   }
 }
 
-/* Conversation Grid */
+
 .conversation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-/* Flip Card Container */
+
 .scenario-card-container {
   perspective: 1200px;
   height: 380px;
@@ -103,7 +102,7 @@
   transform: rotateY(180deg);
 }
 
-/* Front and Back Cards */
+
 .card-front,
 .card-back {
   position: absolute;
@@ -124,7 +123,7 @@
   overflow-y: auto;
 }
 
-/* Front Card */
+
 .scenario-image {
   position: relative;
   height: 160px;
@@ -244,7 +243,7 @@
   gap: 0.5rem;
 }
 
-/* Back Card */
+
 .scenario-header-back {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -373,7 +372,7 @@
   font-size: 1rem;
 }
 
-/* Card Actions */
+
 .card-actions {
   display: flex;
   flex-direction: column;
@@ -423,7 +422,7 @@ color: var(--text-secondary);
   color: var(--text-primary);
 }
 
-/* Sidebar */
+
 .conversation-sidebar {
   display: flex;
   flex-direction: column;
@@ -453,7 +452,7 @@ color: var(--text-secondary);
   gap: 0.5rem;
 }
 
-/* How It Works */
+
 .reco-list {
   display: flex;
   flex-direction: column;
@@ -509,7 +508,7 @@ color: var(--text-secondary);
   line-height: 1.4;
 }
 
-/* Tips */
+
 .tips-list {
   list-style: none;
   padding: 0;
@@ -530,7 +529,7 @@ color: var(--text-secondary);
   border-bottom: none;
 }
 
-/* Responsive */
+
 @media (max-width: 1100px) {
   .conversation-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -582,7 +581,7 @@ color: var(--text-secondary);
   }
 }
 
-/* Dark mode adjustments */
+
 [data-theme="dark"] .scenario-card {
   background: var(--sl-surface-1);
 }

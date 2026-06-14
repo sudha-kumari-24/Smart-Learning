@@ -13,8 +13,9 @@ CORS(app)
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 
-# Scenario prompts for AI context
+
 SCENARIO_PROMPTS = {
+
     'restaurant': """You are a friendly restaurant waiter. Your goal is to take the customer's order naturally.
         - Greet the customer warmly
         - Ask about drinks, appetizers, main course
@@ -45,7 +46,7 @@ SCENARIO_PROMPTS = {
         - Keep responses SHORT (1-2 sentences max)"""
 }
 
-# Fallback scripts for each scenario (keyword-matching)
+
 FALLBACK_SCRIPTS = {
     'restaurant': [
         {"ai": "Welcome to our restaurant! What would you like to order?", "keywords": ["menu", "order", "eat", "food"]},
@@ -77,6 +78,8 @@ FALLBACK_SCRIPTS = {
     ]
 }
 
+
+
 def call_groq_api(scenario, difficulty, history, user_message):
     """Call Groq API for dynamic conversation"""
     if not GROQ_API_KEY:
@@ -84,14 +87,14 @@ def call_groq_api(scenario, difficulty, history, user_message):
     
     system_prompt = SCENARIO_PROMPTS.get(scenario, SCENARIO_PROMPTS['friend'])
     
-    # Add difficulty instruction
+   
     difficulty_instruction = {
         'easy': 'Be very helpful and forgiving. Give hints if the user seems stuck. Evaluate generously.',
         'medium': 'Be natural. Evaluate fairly. Give occasional hints.',
         'hard': 'Be strict but polite. Minimal hints. Evaluate accurately.'
     }.get(difficulty, 'Be natural and fair.')
     
-    # Format conversation history
+   
     history_text = ""
     for msg in history[-4:]:  # Last 4 exchanges for context
         history_text += f"{msg['role']}: {msg['content']}\n"
@@ -233,10 +236,10 @@ def get_fallback_response(scenario, user_message, current_step):
     current_line = script[current_step]
     user_lower = user_message.lower()
     
-    # Check if any keyword matches
+    
     matched = any(keyword in user_lower for keyword in current_line.get('keywords', []))
     
-    if matched or current_step == 0:  # First question always proceeds
+    if matched or current_step == 0: 
         next_step = current_step + 1
         if next_step >= len(script):
             return {
@@ -253,7 +256,7 @@ def get_fallback_response(scenario, user_message, current_step):
                 "hint": ""
             }
     else:
-        # Repeat the same question with a hint
+       
         expected_keywords = ', '.join(current_line.get('keywords', [])[:3])
         return {
             "ai_response": current_line["ai"],
@@ -261,6 +264,9 @@ def get_fallback_response(scenario, user_message, current_step):
             "is_complete": False,
             "hint": f"Try saying something like: {current_line.get('keywords', ['respond appropriately'])[0]}"
         }
+
+
+
 
 @app.route('/api/conversation/chat', methods=['POST'])
 def chat():
@@ -275,13 +281,13 @@ def chat():
         if not user_message:
             return jsonify({"error": "No message provided"}), 400
         
-        # Try AI API first
+      
         response = call_groq_api(scenario, difficulty, history, user_message)
         
         if not response:
             response = call_openrouter_api(scenario, difficulty, history, user_message)
         
-        # Fallback to keyword-matching if both APIs fail
+        
         if not response:
             response = get_fallback_response(scenario, user_message, current_step)
         
@@ -292,6 +298,7 @@ def chat():
             "is_complete": response.get("is_complete", False),
             "hint": response.get("hint", "")
         })
+        
         
     except Exception as e:
         print(f"Error: {e}")

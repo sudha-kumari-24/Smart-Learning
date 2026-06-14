@@ -1,10 +1,12 @@
 virtual environment is set in backend for python posture tracking 
 
+
 #terminal-1: 
 deactivate
 cd backend
 venv\Scripts\activate
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
 
 #terminal-2: 
 deactivate
@@ -12,11 +14,13 @@ cd backend/AISupport_backend
 ai_venv\Scripts\activate
 python ai_support_server.py
 
+
 #terminal-3: 
 deactivate
 cd backend/AISupport_backend
 ai_venv\Scripts\activate
 python recommendation_server.py
+
 
 #terminal-4:
 deactivate
@@ -24,11 +28,13 @@ cd backend/AISupport_backend
 ai_venv\Scripts\activate
 python writing_service.py
 
+
 #terminal-5:
 deactivate
 cd backend/AISupport_backend
 ai_venv\Scripts\activate
 python conversation_service.py
+
 
 #terminal-6:
 deactivate
@@ -36,12 +42,12 @@ venv\Scripts\activate
 cd backend
 node server.js  
 
+
 #terminal-7:
 deactivate
 venv\Scripts\activate
 cd frontend
 npm run dev
-
 
 Detailed description
 

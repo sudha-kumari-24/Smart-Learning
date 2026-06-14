@@ -1,4 +1,4 @@
-// test-websocket.html
+
 <html>
 <body>
     <button onclick="testWebSocket()">Test Connection</button>
@@ -20,7 +20,7 @@
                     `Status: ${data.status}<br>Message: ${data.message}`;
                 
                 if (data.status === 'ready') {
-                    // Send a test frame (simple black image)
+                   
                     const canvas = document.createElement('canvas');
                     canvas.width = 640;
                     canvas.height = 480;

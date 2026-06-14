@@ -1,9 +1,3 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-} */
 
 .timer-btn {
   width: 60px;
@@ -46,7 +40,6 @@
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
 }
 
-/*  className="btn-primary" */
 
 .logo {
   height: 6em;

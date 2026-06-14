@@ -1,12 +1,9 @@
-/* CourseDetail.css */
-
 .course-detail {
   min-height: 100vh;
   padding: 24px 32px;
   background: var(--sl-bg);
 }
 
-/* Main Layout - YouTube Style */
 .course-layout {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -15,7 +12,6 @@
   margin: 0 auto;
 }
 
-/* Video Primary Area */
 .video-primary {
   width: 100%;
 }
@@ -23,7 +19,7 @@
 .video-player-wrapper {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
   background: #000;
   border-radius: 12px;
   overflow: hidden;
@@ -82,7 +78,7 @@
   transform: translateY(-1px);
 }
 
-/* Course Description */
+
 .course-description {
   margin-top: 20px;
   padding: 16px;
@@ -105,7 +101,7 @@
   line-height: 1.6;
 }
 
-/* Playlist Sidebar */
+
 .playlist-sidebar {
   background: var(--sl-surface-1);
   border-radius: 12px;
@@ -142,7 +138,6 @@
   overflow-y: auto;
 }
 
-/* Custom Scrollbar */
 .playlist-videos::-webkit-scrollbar {
   width: 6px;
 }
@@ -156,7 +151,7 @@
   border-radius: 3px;
 }
 
-/* Playlist Items */
+
 .playlist-item {
   display: flex;
   align-items: center;
@@ -228,7 +223,7 @@
   white-space: nowrap;
 }
 
-/* Mobile Navigation */
+
 .playlist-nav-mobile {
   display: none;
   padding: 16px;
@@ -259,7 +254,7 @@
   cursor: not-allowed;
 }
 
-/* Certificate Section */
+
 .certificate-section {
   max-width: 1600px;
   margin: 32px auto 0;
@@ -288,7 +283,7 @@
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
-/* Loading State */
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -321,7 +316,7 @@
   max-width: 500px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 900px) {
   .course-detail {
     padding: 16px;

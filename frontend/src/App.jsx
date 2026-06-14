@@ -82,7 +82,7 @@ function App() {
 
           <Route path="/recommendations" element={<Recommendations />} />
 
-          {/* ❗ ALWAYS LAST */}
+        
           <Route path="*" element={<NotFound />} />
 
         </Routes>
